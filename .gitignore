@@ -22,3 +22,8 @@ target
 
 outputs
 
+# This is for Aidan, I use neovim and it will create eclipse Files
+.classpath
+.project
+.settings/*
+
