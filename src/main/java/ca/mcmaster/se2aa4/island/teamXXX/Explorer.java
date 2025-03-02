@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 public class Explorer implements IExplorerRaid {
-
+    private Controller controller = new DroneController();
     private final Logger logger = LogManager.getLogger();
 
     @Override
@@ -25,8 +25,12 @@ public class Explorer implements IExplorerRaid {
 
     @Override
     public String takeDecision() {
-        JSONObject decision = new JSONObject();
-        decision.put("action", "stop"); // we stop the exploration immediately
+        // JSONObject decision = new JSONObject();
+        // decision.put("action", "stop"); // we stop the exploration immediately
+        // return decision.toString();
+        
+        // PROBLEM stop doesn't need any parameters so im passing empty JSON
+        JSONObject decision = controller.pressButton(Action.STOP, new JSONObject());
         logger.info("** Decision: {}",decision.toString());
         return decision.toString();
     }
