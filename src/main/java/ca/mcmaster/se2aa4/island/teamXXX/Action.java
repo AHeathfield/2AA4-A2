@@ -4,6 +4,7 @@ public enum Action {
     FLY,
     ECHO,
     STOP,
-    TURN,
-    SCAN
+    HEADING,
+    SCAN,
+    LAND,
 }

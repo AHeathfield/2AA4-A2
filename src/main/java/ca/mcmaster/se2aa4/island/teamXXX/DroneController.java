@@ -10,7 +10,11 @@ public class DroneController implements Controller {
     public DroneController() {
         // Adding commands for this controller
         addCommand(Action.STOP, new StopCommand());
-        // TODO add rest of commands
+        addCommand(Action.FLY, new FlyCommand());
+        addCommand(Action.ECHO, new EchoCommand());
+        addCommand(Action.SCAN, new ScanCommand());
+        addCommand(Action.HEADING, new HeadingCommand());
+        addCommand(Action.LAND, new LandCommand());
     }
     
     // This is how all commands will be sent to drone

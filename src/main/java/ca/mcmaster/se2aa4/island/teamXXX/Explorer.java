@@ -24,6 +24,7 @@ public class Explorer implements IExplorerRaid {
         logger.info("Battery level is {}", batteryLevel);
     }
 
+    int count = 0;
     @Override
     public String takeDecision() {
         // JSONObject decision = new JSONObject();
@@ -32,7 +33,36 @@ public class Explorer implements IExplorerRaid {
 
         // TODO use computer.determineNextAction to send to drone
         // PROBLEM stop doesn't need any parameters so im passing empty JSON
-        JSONObject decision = controller.pressButton(Action.STOP, new JSONObject());
+        
+        JSONObject decision = new JSONObject();
+        JSONObject parameters = new JSONObject();
+
+        if (count == 0) {
+            // FLY ACTION
+            // decision = controller.pressButton(Action.FLY, parameters);
+
+            // SCAN ACTION
+            // decision = controller.pressButton(Action.SCAN, parameters);
+
+            // ECHO ACTION
+            // parameters.put("direction", "E");
+            // decision = controller.pressButton(Action.ECHO, parameters);
+
+            // HEADING ACTION
+            parameters.put("direction", "S");
+            decision = controller.pressButton(Action.HEADING, parameters);
+
+            // LAND ACTION
+            // parameters.put("creek", "id");
+            // parameters.put("people", "1");
+            // decision = controller.pressButton(Action.LAND, parameters);
+
+            count++;
+        } else {
+            // STOP ACTION
+            decision = controller.pressButton(Action.STOP, parameters);
+        }
+
         logger.info("** Decision: {}",decision.toString());
         return decision.toString();
     }
