@@ -11,10 +11,12 @@ public class RescueComputer implements Computer {
     private Direction droneDir;
     private Integer droneBat;
     private String droneStatus;
+    private int counter;
 
     public RescueComputer() {
         // TODO assign members
         this.droneBat = 1000; //TEMP
+        this.counter = 0;
     }
 
     @Override
@@ -33,6 +35,10 @@ public class RescueComputer implements Computer {
 
     @Override
     public Action determineNextAction() {
+
+        if (count = 0;) {
+            return Action.ECHO;
+        }
         // TODO add logic
         return Action.STOP;
     } 
