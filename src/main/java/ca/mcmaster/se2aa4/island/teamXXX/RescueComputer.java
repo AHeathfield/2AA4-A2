@@ -11,10 +11,14 @@ public class RescueComputer implements Computer {
     private Direction droneDir;
     private Integer droneBat;
     private String droneStatus;
+    private int counter;
 
-    public RescueComputer() {
-        // TODO assign members
-        this.droneBat = 1000; //TEMP
+    public RescueComputer(JSONObject info) {
+        this.droneDir = stringToDirection(info.getString("heading"));
+        this.droneBat = info.getInt("budget");
+        logger.info("The drone is facing {}", droneDir.toString());
+        logger.info("Battery level is {}", droneBat);
+        this.counter = 0;
     }
 
     @Override
@@ -33,7 +37,36 @@ public class RescueComputer implements Computer {
 
     @Override
     public Instruction determineNextInstruction() {
-        // TODO add logic
+        JSONObject params = new JSONObject();
+        switch (counter) {
+            case 0:
+                params.put("direction", droneDir.getLeftDirection().toString());
+                return new Instruction(Action.ECHO, params);
+            case 1:
+                params.put("direction", droneDir.toString());
+                return new Instruction(Action.ECHO, params);
+            case 2:
+                params.put("direction", droneDir.getRightDirection().toString());
+                return new Instruction(Action.ECHO, params);
+        }
+        
+        counter++;
+        counter = counter % 3;
         return new Instruction(Action.STOP, new JSONObject());
     } 
+
+    //refactor this
+    private Direction stringToDirection(String string) {
+        switch (string) {
+            case "North":
+                return Direction.NORTH;
+            case "East":
+                return Direction.EAST;
+            case "South":
+                return Direction.SOUTH;
+            case "West":
+                return Direction.WEST;
+        }
+        return Direction.EAST;
+    }
 }

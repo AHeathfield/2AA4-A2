@@ -1,16 +1,17 @@
 package ca.mcmaster.se2aa4.island.teamXXX;
 
 public enum Direction {
-    NORTH(null, null),
-    EAST(null, null), 
-    SOUTH(null, null), 
-    WEST(null, null);
+    NORTH(null, null, "N"),
+    EAST(null, null, "E"), 
+    SOUTH(null, null, "S"), 
+    WEST(null, null, "W");
 
     private Direction rightDirection;
     private Direction leftDirection;
+    private String abbreviation;
 
-    Direction (Direction rightDirection, Direction leftDirection) {
-
+    Direction (Direction rightDirection, Direction leftDirection, String abbreviation) {
+        this.abbreviation = abbreviation;
     }
 
     static {
@@ -32,6 +33,10 @@ public enum Direction {
     }
     public Direction getLeftDirection() {
         return leftDirection;
+    }
+    @Override
+    public String toString() {
+        return this.abbreviation;
     }
 
 }

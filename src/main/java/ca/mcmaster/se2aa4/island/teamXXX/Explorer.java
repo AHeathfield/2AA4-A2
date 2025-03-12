@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 public class Explorer implements IExplorerRaid {
-    private Computer computer = new RescueComputer();
+    private Computer computer; //rescuecomputer
     private Controller controller = new DroneController();
     private final Logger logger = LogManager.getLogger();
 
@@ -18,10 +18,7 @@ public class Explorer implements IExplorerRaid {
         logger.info("** Initializing the Exploration Command Center");
         JSONObject info = new JSONObject(new JSONTokener(new StringReader(s)));
         logger.info("** Initialization info:\n {}",info.toString(2));
-        String direction = info.getString("heading");
-        Integer batteryLevel = info.getInt("budget");
-        logger.info("The drone is facing {}", direction);
-        logger.info("Battery level is {}", batteryLevel);
+        computer = new RescueComputer(info);
     }
 
     int count = 0;
