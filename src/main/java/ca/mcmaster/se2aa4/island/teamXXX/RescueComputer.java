@@ -11,35 +11,29 @@ public class RescueComputer implements Computer {
     private Direction droneDir;
     private Integer droneBat;
     private String droneStatus;
-    private int counter;
 
     public RescueComputer() {
         // TODO assign members
         this.droneBat = 1000; //TEMP
-        this.counter = 0;
     }
 
     @Override
     public void processData(JSONObject droneResponse) {
         // TODO need to make this more flexible, currently hard coded for only stop
-        logger.info("** Response received:\n"+droneResponse.toString(2));
-        Integer cost = droneResponse.getInt("cost");
-        this.droneBat -= cost;
-        logger.info("The cost of the action was {}", cost);
-        logger.info("Current Drone Battery is {}", this.droneBat);
-        this.droneStatus = droneResponse.getString("status");
-        logger.info("The status of the drone is {}", droneStatus);
-        JSONObject extraInfo = droneResponse.getJSONObject("extras");
-        logger.info("Additional information received: {}", extraInfo);
+        // logger.info("** Response received:\n"+droneResponsroneResponse.toString(2));
+        // Integer cost = droneResponse.getInt("cost");
+        // this.droneBat -= cost;
+        // logger.info("The cost of the action was {}", cost);
+        // logger.info("Current Drone Battery is {}", this.droneBat);
+        // this.droneStatus = droneResponse.getString("status");
+        // logger.info("The status of the drone is {}", droneStatus);
+        // JSONObject extraInfo = droneResponse.getJSONObject("extras");
+        // logger.info("Additional information received: {}", extraInfo);
     }
 
     @Override
-    public Action determineNextAction() {
-
-        if (count = 0;) {
-            return Action.ECHO;
-        }
+    public Instruction determineNextInstruction() {
         // TODO add logic
-        return Action.STOP;
+        return new Instruction(Action.STOP, new JSONObject());
     } 
 }
