@@ -37,36 +37,37 @@ public class RescueComputer implements Computer {
 
     @Override
     public Instruction determineNextInstruction() {
+        //find land with echo
         JSONObject params = new JSONObject();
         switch (counter) {
             case 0:
                 params.put("direction", droneDir.getLeftDirection().toString());
-                return new Instruction(Action.ECHO, params);
             case 1:
                 params.put("direction", droneDir.toString());
-                return new Instruction(Action.ECHO, params);
             case 2:
                 params.put("direction", droneDir.getRightDirection().toString());
-                return new Instruction(Action.ECHO, params);
         }
-        
         counter++;
         counter = counter % 3;
-        return new Instruction(Action.STOP, new JSONObject());
+        return new Instruction(Action.ECHO, params);
+
+        //soon to use this
+        //return new Instruction(Action.STOP, new JSONObject());
     } 
 
-    //refactor this
+    //switch case OK because nothing else will ever be added
     private Direction stringToDirection(String string) {
+        Direction dir = null;
         switch (string) {
             case "North":
-                return Direction.NORTH;
+                dir = Direction.NORTH;
             case "East":
-                return Direction.EAST;
+                dir = Direction.EAST;
             case "South":
-                return Direction.SOUTH;
+                dir = Direction.SOUTH;
             case "West":
-                return Direction.WEST;
+                dir = Direction.WEST;
         }
-        return Direction.EAST;
+        return dir;
     }
 }

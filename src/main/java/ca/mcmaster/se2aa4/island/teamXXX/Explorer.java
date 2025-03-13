@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 public class Explorer implements IExplorerRaid {
-    private Computer computer; //rescuecomputer
+    private Computer computer; //RescueComputer
     private Controller controller = new DroneController();
     private final Logger logger = LogManager.getLogger();
 
