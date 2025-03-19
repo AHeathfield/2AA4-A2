@@ -47,7 +47,8 @@ public class RescueComputer implements Computer {
                     if (range != 0) {
                         islandFound = true;
                         distanceToIsland = range;
-                        logger.info("island found in echo");
+                        logger.info("island found in echo!");
+                        logger.info("island found at " + distanceToIsland + "tiles away");
                         String islandDir = lastInstruction.getParameters().getString("direction");
 
                         // if we are already facing in the direction of the found island we just need to fly, else we need to turn to the direction
@@ -59,20 +60,26 @@ public class RescueComputer implements Computer {
                         }   
                     } else {
                         // scanning all directions
-
+                        logger.info("echo in all directions");
                         // you knwo what i mean uwu 
                         switch (counter) {
                             case 0:
                                 param.put("direction", droneDir.toString());
                                 nextInstruction = new Instruction(Action.ECHO, param);
+                                logger.info("echo straight");
+                                break;
                             case 1:
                                 param.put("direction", droneDir.getRightDirection().toString());
                                 nextInstruction = new Instruction(Action.ECHO, param);
+                                logger.info("echo right");
+                                break;
                             case 2:
                                 nextInstruction = new Instruction(Action.FLY, param);
+                                logger.info("scanned all dirs, go forward");
+                                break;
                         }
                         counter++;
-                        counter %= 3;
+                        counter = counter % 3;
                         
                     }
                 } else { // island already found before, move towards island
@@ -94,8 +101,11 @@ public class RescueComputer implements Computer {
                     counter = 0;
                     param.put("direction", droneDir.getLeftDirection().toString());
                     nextInstruction = new Instruction(Action.ECHO, param);
+                    logger.info("echo left");
                 } else {
+                    logger.info("flying to island");
                     distanceToIsland--;
+                    logger.info("distance: " + distanceToIsland);
                     if (distanceToIsland > 0) {
                         nextInstruction = new Instruction(Action.FLY, param);
                     } else {    // <= 0
@@ -110,7 +120,7 @@ public class RescueComputer implements Computer {
                 }
                 break;
             case STOP:
-                logger.info("shouldn't be reached");
+                logger.info("drone stopped");
                 break;
             case LAND:
                 break;
@@ -156,14 +166,11 @@ public class RescueComputer implements Computer {
     //switch case OK because nothing else will ever be added
 
     private Direction stringToDirection(String string) {
-        logger.info("stringToDirection");
         for (Direction dir : Direction.values()){
-            logger.info(dir.toString());
             if (dir.toString().equals(string)){
                 return dir;
             }
         }
-        logger.info("stringToDirection RETURNING NULL");
         return null;
     }
 }
