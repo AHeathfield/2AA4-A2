@@ -61,7 +61,7 @@ public class Explorer implements IExplorerRaid {
         // }
         
         // MVP
-        Instruction instruction = computer.determineNextInstruction();
+        Instruction instruction = computer.getNextInstruction();
         JSONObject decision = controller.pressButton(instruction.getAction(), instruction.getParameters());
         logger.info("** Decision: {}",decision.toString());
         return decision.toString();

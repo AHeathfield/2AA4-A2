@@ -5,5 +5,5 @@ import org.json.JSONObject;
 // This will be the brains that determines the next action
 public interface Computer {
     public void processData(JSONObject data);
-    public Instruction determineNextInstruction();
+    public Instruction getNextInstruction();
 }
