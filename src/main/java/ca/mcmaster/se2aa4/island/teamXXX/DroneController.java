@@ -2,6 +2,7 @@ package ca.mcmaster.se2aa4.island.teamXXX;
 
 import java.util.EnumMap;
 import org.json.JSONObject;
+import ca.mcmaster.se2aa4.island.teamXXX.Commands.*;
 
 public class DroneController implements Controller {
     private EnumMap<Action, Command> commandMap = new EnumMap<>(Action.class);
