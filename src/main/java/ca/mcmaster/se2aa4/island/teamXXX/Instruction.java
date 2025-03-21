@@ -10,6 +10,10 @@ public class Instruction {
         this.action = action;
         this.params = params;
     }
+    public Instruction(Action action) {
+        this.action = action;
+        this.params = new JSONObject();
+    }
 
     public Action getAction() {
         return this.action;
