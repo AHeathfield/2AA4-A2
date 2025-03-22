@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 public class MoveState extends State {
     private final Logger logger = LogManager.getLogger();
+    private boolean testing = false;     // Set this to true if you want to do test state
     // private Instruction instructFromLastState;  // The instruction that lead into this state
 
     // Constructor
@@ -16,6 +17,15 @@ public class MoveState extends State {
     // For now these will just be the STOP action
     @Override
     public Instruction determineNextInstruction(JSONObject droneResponse) {
+        // THIS IS FOR TESTING JUST SET VAR TO FALSE IF NOT
+        if (testing) {
+            computer.setCurrentState(new TestMoveState(computer));
+            return new Instruction(Action.SCAN);
+        }
+
+
+
+
         decrementDistanceToIsland();    // Remember it enters this state after it's already started moving!
         int islandDistance = computer.getDistanceToIsland();
         Direction currentDir = computer.getDroneDirection();
@@ -45,12 +55,12 @@ public class MoveState extends State {
                 // Now we need to see if we turned left or right
                 // if it turned right
                 if (computer.getFormerDroneDirection().equals(currentDir.getRightDirection())) {
-                    param.put("direction", currentDir.getRightDirection().toString());
-                    computer.setDroneDirection(currentDir.getRightDirection());
-                }
-                else {
                     param.put("direction", currentDir.getLeftDirection().toString());
                     computer.setDroneDirection(currentDir.getLeftDirection());
+                }
+                else {
+                    param.put("direction", currentDir.getRightDirection().toString());
+                    computer.setDroneDirection(currentDir.getRightDirection());
                 }
 
                 return new Instruction(Action.HEADING, param);
