@@ -19,11 +19,7 @@ public class MoveState extends State {
         decrementDistanceToIsland();    // Remember it enters this state after it's already started moving!
         int islandDistance = computer.getDistanceToIsland();
         Direction currentDir = computer.getDroneDirection();
-        // TODO 1: Need to make it so when the range is 1 away I do the turn back into it, this turn
-        // will always be the same turn it did orignally
-        // ALl worked but map17 is 1 off....
-        
-        //TODO 2: Need to handle the special case where the island is right beside it
+        // TODO: Need to handle the special case where the island is right beside it
         // ANSWER: treat it like a coast search??
         
 
