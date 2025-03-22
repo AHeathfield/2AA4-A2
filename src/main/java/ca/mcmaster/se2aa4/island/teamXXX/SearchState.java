@@ -41,7 +41,7 @@ public class SearchState extends State {
         // If there is an island that has been scanned
         else {
             logger.info("Island has been found! It is {}m away", range);
-            computer.setDistanceToIsland(range);    // Letting computer know how far island is
+            computer.setDistanceToIsland(range + 1);    // Letting computer know how far island is
             return nextMoveInstruction(droneDir);
         }
     }
@@ -82,11 +82,13 @@ public class SearchState extends State {
         else if (lastEchoDir == droneDir.getRightDirection()) {
             computer.setCurrentState(new MoveState(computer));
             param.put("direction", droneDir.getRightDirection().toString());
+            computer.setDroneDirection(droneDir.getRightDirection());
             return new Instruction(Action.HEADING, param);
         }
         else {
             computer.setCurrentState(new MoveState(computer));
             param.put("direction", droneDir.getLeftDirection().toString());
+            computer.setDroneDirection(droneDir.getLeftDirection());
             return new Instruction(Action.HEADING, param);
         }
     }
