@@ -37,6 +37,8 @@ public class CheckForTurnState extends State {
         //     else no land to side, start turn
         
         JSONObject param = new JSONObject();
+        logger.info("current state: {}", lastState);
+        logger.info("current dir: {}", computer.getDroneDirection());
 
         switch (lastState) {
             case ECHO_FORWARD:
@@ -50,7 +52,7 @@ public class CheckForTurnState extends State {
                         return new Instruction(Action.SCAN, param);
                     }
 
-                    logger.info("Land ahead, keep flying");
+                    logger.info("Land ahead, keep flying. It is {}m away", distanceAhead);
                     return new Instruction(Action.FLY, param);
                 }
 
@@ -124,7 +126,7 @@ public class CheckForTurnState extends State {
                 // just echoed forward
                 // if land ahead, keep flying (ECHO_FORWARD)
                 // else no land ahead, stop
-                
+                logger.info("checking for more land ahead");
                 boolean noLandAhoy = droneResponse.getJSONObject("extras").get("found").equals("OUT_OF_RANGE");
                 if (noLandAhoy) {
                     // no land ahead, stop
@@ -132,9 +134,9 @@ public class CheckForTurnState extends State {
                     return new Instruction(Action.STOP, param);
                 } else {
                     // land ahead, keep flying
-                    logger.info("Land ahead, keep flying");
                     lastState = miniState.ECHO_FORWARD;
                     distanceAhead = droneResponse.getJSONObject("extras").getInt("range");
+                    logger.info("Land ahead, keep flying. It is {}m away", distanceAhead);
                     return new Instruction(Action.FLY, param);
                 }
             default:

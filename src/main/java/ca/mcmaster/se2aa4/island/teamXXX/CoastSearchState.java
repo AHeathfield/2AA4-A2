@@ -30,8 +30,8 @@ public class CoastSearchState extends State {
 
         // stop if over creek
         if (overCreek) {
-            logger.info("Over creek");
-            return new Instruction(Action.STOP, param);
+            logger.info("------------- Over creek ----------------");
+            //return new Instruction(Action.STOP, param);
         }
 
         JSONArray biomesJSON = droneResponse.getJSONObject("extras").getJSONArray("biomes");
@@ -44,11 +44,11 @@ public class CoastSearchState extends State {
         if (overOcean) {
             logger.info("Over ocean, looking to start turn sequence");
             computer.setCurrentState(new CheckForTurnState(computer));
-            param.put("direction", droneDir);
+            param.put("direction", droneDir.toString());
             return new Instruction(Action.ECHO, param);
         } else {
             logger.info("Not over ocean, continue flying");
-            computer.setCurrentState(new ReturnState(computer));
+            computer.setCurrentState(new CoastScanState(computer));
             return new Instruction(Action.FLY, param);
         }
 
