@@ -3,6 +3,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
+// Patrol coast without grid search
 public class PatrolCoastState extends State {
     private final Logger logger = LogManager.getLogger();
 
