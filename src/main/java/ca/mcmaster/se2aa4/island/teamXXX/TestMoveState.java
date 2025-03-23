@@ -69,7 +69,7 @@ public class TestMoveState extends State {
             }
             else {
                 logger.info("Island has been reached!");
-                computer.setCurrentState(new RotateLeftState(computer)); // TEST: rotate right
+                computer.setCurrentState(new RotateBackwardsState(computer)); // TEST: rotate right
                 return new Instruction(Action.SCAN);
             }
         }
