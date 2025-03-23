@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 public class MoveState extends State {
     private final Logger logger = LogManager.getLogger();
-    private boolean testing = false;     // Set this to true if you want to do test state
+    private boolean testing = true;     // Set this to true if you want to do test state
     // private Instruction instructFromLastState;  // The instruction that lead into this state
 
     // Constructor
