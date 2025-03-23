@@ -15,6 +15,7 @@ public class CheckForTurnState extends State {
         ECHO_SIDE,
         FLY_ALONG_SIDE,
         TURN,
+        CHECK_MORE_LAND,
 
     }
     miniState lastState  = miniState.ECHO_FORWARD;
@@ -44,7 +45,7 @@ public class CheckForTurnState extends State {
                     // last instruction was fly
                     distanceAhead--;
                     if (distanceAhead == 0) {
-                        logger.info("Island found, start checking side");
+                        logger.info("Island found, start scanning");
                         computer.setCurrentState(new CoastSearchState(computer));
                         return new Instruction(Action.SCAN, param);
                     }
@@ -67,6 +68,11 @@ public class CheckForTurnState extends State {
                 } else {
                     int range = droneResponse.getJSONObject("extras").getInt("range");
                     distanceAhead = range;
+                    if (range == 0) {
+                        logger.info("back on land found, start scanning");
+                        computer.setCurrentState(new CoastSearchState(computer));
+                        return new Instruction(Action.SCAN, param);
+                    }
                     logger.info("more land ahead! It is {}m away", range);
                     return new Instruction(Action.FLY, param);
                 }
@@ -104,17 +110,36 @@ public class CheckForTurnState extends State {
                 param.put("direction", Direction.EAST.toString());
                 return new Instruction(Action.ECHO, param);
             case TURN:
-                // just turned, turn again OR 
+                // just turned, turn again OR check if more land
                 Direction turnDirection = columnDir == Direction.SOUTH ? Direction.NORTH : Direction.SOUTH;
                 if (columnDir == computer.getDroneDirection()) {
                     // already turned, 
+                    lastState = miniState.CHECK_MORE_LAND;
+                    param.put("direction", computer.getDroneDirection().toString());
+                    return new Instruction(Action.ECHO, param);
                 }
                 param.put("direction", turnDirection.toString());
                 return new Instruction(Action.HEADING, param);
+            case CHECK_MORE_LAND:
+                // just echoed forward
+                // if land ahead, keep flying (ECHO_FORWARD)
+                // else no land ahead, stop
                 
+                boolean noLandAhoy = droneResponse.getJSONObject("extras").get("found").equals("OUT_OF_RANGE");
+                if (noLandAhoy) {
+                    // no land ahead, stop
+                    logger.info("No more land ahead, stop");
+                    return new Instruction(Action.STOP, param);
+                } else {
+                    // land ahead, keep flying
+                    logger.info("Land ahead, keep flying");
+                    lastState = miniState.ECHO_FORWARD;
+                    distanceAhead = droneResponse.getJSONObject("extras").getInt("range");
+                    return new Instruction(Action.FLY, param);
+                }
+            default:
+                logger.error("Invalid state");
+                return new Instruction(Action.STOP, param);
         }
-
-        computer.setCurrentState(new CoastSearchState(computer));
-        return new Instruction(Action.SCAN, param);
     }
 }
