@@ -51,6 +51,8 @@ public class RescueComputer implements Computer {
     public Instruction getNextInstruction() {
         // I believe nextInstruction is properly handled by the state pattern
         instructHistory.add(nextInstruction);
+        logger.info("current dir: {}", droneDir);
+        logger.info("battery: {}", droneBat);
         return nextInstruction;
     } 
 

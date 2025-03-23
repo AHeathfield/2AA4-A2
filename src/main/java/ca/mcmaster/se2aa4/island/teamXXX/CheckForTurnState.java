@@ -16,7 +16,7 @@ public class CheckForTurnState extends State {
         FLY_ALONG_SIDE,
         TURN,
         CHECK_MORE_LAND,
-
+        RETURN_TO_LAND,
     }
     miniState lastState  = miniState.ECHO_FORWARD;
     int distanceAhead = 0;
@@ -69,8 +69,8 @@ public class CheckForTurnState extends State {
                     return new Instruction(Action.ECHO, param);
                 } else {
                     int range = droneResponse.getJSONObject("extras").getInt("range");
-                    distanceAhead = range;
-                    if (range == 0) {
+                    distanceAhead = range+1;
+                    if (distanceAhead == 0) {
                         logger.info("back on land found, start scanning");
                         computer.setCurrentState(new CoastSearchState(computer));
                         return new Instruction(Action.SCAN, param);
@@ -80,13 +80,14 @@ public class CheckForTurnState extends State {
                 }
             case ECHO_SIDE:
                 boolean landNotFound1 = droneResponse.getJSONObject("extras").get("found").equals("OUT_OF_RANGE");
-
+                
                 // no land to side, start turning
                 if (landNotFound1) {
                     // start turning
                     logger.info("No land to side, start turning");
                     lastState = miniState.TURN;
                     columnDir = computer.getDroneDirection();
+                    computer.setDroneDirection(Direction.EAST);
                     param.put("direction", Direction.EAST.toString());
                     return new Instruction(Action.HEADING, param);
                 }
@@ -102,6 +103,7 @@ public class CheckForTurnState extends State {
                     logger.info("start turning");
                     lastState = miniState.TURN;
                     columnDir = computer.getDroneDirection();
+                    computer.setDroneDirection(Direction.EAST);
                     param.put("direction", Direction.EAST.toString());
                     return new Instruction(Action.HEADING, param);
                 }
@@ -114,12 +116,14 @@ public class CheckForTurnState extends State {
             case TURN:
                 // just turned, turn again OR check if more land
                 Direction turnDirection = columnDir == Direction.SOUTH ? Direction.NORTH : Direction.SOUTH;
-                if (columnDir == computer.getDroneDirection()) {
+                logger.info("column dir {}", columnDir);
+                if (columnDir == computer.getDroneDirection().getRightDirection().getRightDirection()) {
                     // already turned, 
                     lastState = miniState.CHECK_MORE_LAND;
                     param.put("direction", computer.getDroneDirection().toString());
                     return new Instruction(Action.ECHO, param);
                 }
+                computer.setDroneDirection(turnDirection);
                 param.put("direction", turnDirection.toString());
                 return new Instruction(Action.HEADING, param);
             case CHECK_MORE_LAND:
@@ -135,10 +139,26 @@ public class CheckForTurnState extends State {
                 } else {
                     // land ahead, keep flying
                     lastState = miniState.ECHO_FORWARD;
-                    distanceAhead = droneResponse.getJSONObject("extras").getInt("range");
+                    distanceAhead = droneResponse.getJSONObject("extras").getInt("range") + 1;
                     logger.info("Land ahead, keep flying. It is {}m away", distanceAhead);
+                    if (distanceAhead == 0) {
+                        logger.info("back on land found, start scanning");
+                        computer.setCurrentState(new CoastScanState(computer));
+                        return new Instruction(Action.FLY, param);
+                    }
+
                     return new Instruction(Action.FLY, param);
                 }
+            case RETURN_TO_LAND:
+                // just flew forward, keep flying until at land
+                distanceAhead--;
+                if (distanceAhead == 0) {
+                    logger.info("Island found, start scanning");
+                    computer.setCurrentState(new CoastScanState(computer));
+                    return new Instruction(Action.FLY, param);
+                }
+                logger.info("continue flying, land is {}m away", distanceAhead);
+                return new Instruction(Action.FLY, param);
             default:
                 logger.error("Invalid state");
                 return new Instruction(Action.STOP, param);
