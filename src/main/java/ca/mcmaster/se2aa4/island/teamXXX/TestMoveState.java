@@ -9,12 +9,16 @@ public class TestMoveState extends State {
     // private Instruction instructFromLastState;  // The instruction that lead into this state
     private boolean lastActionWasTestSCAN = false;
     private boolean isFirstRun = true;
+    private Direction formerDroneDir;   // Useful for when it turns to know what dir it was before
+    private int islandDistance;
 
     // Constructor
-    public TestMoveState(RescueComputer computer) {
+    public TestMoveState(RescueComputer computer, Direction formerDroneDir, int islandDistance) {
         super(computer);
-        // instructFromLastState = computer.getLastInstruction();
+        this.formerDroneDir = formerDroneDir;
+        this.islandDistance = islandDistance;
     }
+
 
     // For now these will just be the STOP action
     @Override
@@ -25,7 +29,6 @@ public class TestMoveState extends State {
             isFirstRun = false;
         }
 
-        int islandDistance = computer.getDistanceToIsland();
         Direction currentDir = computer.getDroneDirection();
         // TODO: Need to handle the special case where the island is right beside it
         // ANSWER: treat it like a coast search??
@@ -41,11 +44,11 @@ public class TestMoveState extends State {
             // Handling case for if we turned or not 
             else if (islandDistance == 1) {
                 logger.info("Island is currently {}m away.", islandDistance);
-                logger.info("Former: {}, Current: {}", computer.getFormerDroneDirection(), currentDir);
+                logger.info("Former: {}, Current: {}", formerDroneDir, currentDir);
                 
                 // Need to see if we turned before heading to island
                 // If we did not turn
-                if (currentDir == computer.getFormerDroneDirection()) {
+                if (currentDir == formerDroneDir) {
                     return new Instruction(Action.FLY);
                 }
                 // If we did turn
@@ -54,8 +57,8 @@ public class TestMoveState extends State {
 
                     // Now we need to see if we turned left or right
                     // if it turned right
-                    logger.info("Former dir: {}, Current dir: {}", computer.getFormerDroneDirection(), currentDir.getRightDirection());
-                    if (computer.getFormerDroneDirection() == currentDir.getRightDirection()) {
+                    logger.info("Former dir: {}, Current dir: {}", formerDroneDir, currentDir.getRightDirection());
+                    if (formerDroneDir == currentDir.getRightDirection()) {
                         param.put("direction", currentDir.getLeftDirection().toString());
                         computer.setDroneDirection(currentDir.getLeftDirection());
                     }
@@ -82,7 +85,6 @@ public class TestMoveState extends State {
     }
 
     private void decrementDistanceToIsland() {
-        int decremented = computer.getDistanceToIsland() - 1;
-        computer.setDistanceToIsland(decremented);
+        islandDistance--;
     }
 }

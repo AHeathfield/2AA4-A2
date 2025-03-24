@@ -12,12 +12,14 @@ public class RotateState extends State {
     private List<Instruction> sequenceOfInstructs;
     private int instructCount;  // To keep track of what instruct we are on
     private Direction droneDir;
+    private Direction formerDroneDir;
 
     // Constructor
-    public RotateState(RescueComputer computer, Turn turn) {
+    public RotateState(RescueComputer computer, Turn turn, Direction formerDroneDir) {
         super(computer);
         this.instructCount = 0;
         this.droneDir = computer.getDroneDirection();
+        this.formerDroneDir = formerDroneDir;
         setupInstructions(turn);
     }
 
@@ -56,7 +58,7 @@ public class RotateState extends State {
     public Instruction determineNextInstruction(JSONObject droneResponse) {
         
         String rotation;
-        if (computer.getFormerDroneDirection().getRightDirection() == computer.getDroneDirection()) {
+        if (formerDroneDir.getRightDirection() == droneDir) {
             rotation = "Right";
         } else {
             rotation = "Left";
