@@ -30,15 +30,17 @@ public class TestMoveState extends State {
         }
 
         Direction currentDir = computer.getDroneDirection();
+        Position currentPos = computer.getDronePosition();
         // TODO: Need to handle the special case where the island is right beside it
         // ANSWER: treat it like a coast search??
         
         if (lastActionWasTestSCAN) {
             decrementDistanceToIsland();    // Remember it enters this state after it's already started moving!
             lastActionWasTestSCAN = false;
-            // If we are not at island yetyet
+            // If we are not at island yet
             if (islandDistance > 1) {
                 logger.info("Island is currently {}m away.", islandDistance);
+                computer.setDronePosition(currentPos.getForwardPosition(currentDir));
                 return new Instruction(Action.FLY);
             }
             // Handling case for if we turned or not 
@@ -49,6 +51,7 @@ public class TestMoveState extends State {
                 // Need to see if we turned before heading to island
                 // If we did not turn
                 if (currentDir == formerDroneDir) {
+                    computer.setDronePosition(currentPos.getForwardPosition(currentDir));
                     return new Instruction(Action.FLY);
                 }
                 // If we did turn
@@ -57,14 +60,15 @@ public class TestMoveState extends State {
 
                     // Now we need to see if we turned left or right
                     // if it turned right
-                    logger.info("Former dir: {}, Current dir: {}", formerDroneDir, currentDir.getRightDirection());
-                    if (formerDroneDir == currentDir.getRightDirection()) {
+                    if (formerDroneDir.equals(currentDir.getRightDirection())) {
                         param.put("direction", currentDir.getLeftDirection().toString());
                         computer.setDroneDirection(currentDir.getLeftDirection());
+                        computer.setDronePosition(currentPos.getLeftPosition(currentDir));
                     }
                     else {
                         param.put("direction", currentDir.getRightDirection().toString());
                         computer.setDroneDirection(currentDir.getRightDirection());
+                        computer.setDronePosition(currentPos.getRightPosition(currentDir));
                     }
 
                     return new Instruction(Action.HEADING, param);
