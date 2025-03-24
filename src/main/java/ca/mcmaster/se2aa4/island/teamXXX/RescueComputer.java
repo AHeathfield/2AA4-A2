@@ -55,6 +55,17 @@ public class RescueComputer implements Computer {
         if (nextInstruction.getAction() == Action.SCAN) {
             updateMapAtPosition(dronePos, droneResponse);
         }
+        else if (nextInstruction.getAction() == Action.FLY) {
+            setDronePosition(dronePos.getForwardPosition(droneDir));
+        }
+        else if (nextInstruction.getAction() == Action.HEADING) {
+            String direction = nextInstruction.getParameters().getString("direction");
+            if (direction.equals(droneDir.getLeftDirection().toString())) {
+                setDronePosition(dronePos.getLeftPosition(droneDir));
+            } else {
+                setDronePosition(dronePos.getRightPosition(droneDir));
+            }
+        }
 
         // This lets the state pattern determine the next instruction based on current state
         nextInstruction = currentState.determineNextInstruction(droneResponse);

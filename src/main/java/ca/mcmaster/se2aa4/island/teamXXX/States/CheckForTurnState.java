@@ -136,7 +136,8 @@ public class CheckForTurnState extends State {
                 if (noLandAhoy) {
                     // no land ahead, stop
                     logger.info("No more land ahead, stop");
-                    return new Instruction(Action.STOP, param);
+                    computer.setCurrentState(new ReturnState(computer));
+                    return new Instruction(Action.SCAN, param);
                 } else {
                     // land ahead, keep flying
                     lastState = miniState.ECHO_FORWARD;

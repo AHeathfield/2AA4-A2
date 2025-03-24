@@ -8,8 +8,8 @@ public class MoveState extends State {
     private Direction formerDroneDir;   // Useful for when it turns to know what dir it was before
     private int islandDistance;
 
-    private boolean gridSearch = false; // Set this to true if you want to do grid search
-    private boolean testing = true;     // Set this to true if you want to do test state
+    private boolean gridSearch = true; // Set this to true if you want to do grid search
+    private boolean testing = false;     // Set this to true if you want to do test state
 
     // Constructor
     public MoveState(RescueComputer computer, Direction formerDroneDir, int islandDistance) {
@@ -22,7 +22,7 @@ public class MoveState extends State {
     @Override
     public Instruction determineNextInstruction(JSONObject droneResponse) {
         // THIS IS FOR TESTING JUST SET VAR TO FALSE IF NOT
-        if (testing && !gridSearch) {
+        if (testing) {
             computer.setCurrentState(new TestMoveState(computer, formerDroneDir, islandDistance));
             return new Instruction(Action.SCAN);
         }
