@@ -30,6 +30,7 @@ public class MoveState extends State {
 
         decrementDistanceToIsland();    // Remember it enters this state after it's already started moving!
         Direction currentDir = computer.getDroneDirection();
+        Position currentPos = computer.getDronePosition();
         // TODO: Need to handle the special case where the island is right beside it
         // ANSWER: treat it like a coast search??
         
@@ -37,6 +38,7 @@ public class MoveState extends State {
         // If we are not at island yet
         if (islandDistance > 1) {
             logger.info("Island is currently {}m away.", islandDistance);
+            computer.setDronePosition(currentPos.getForwardPosition(currentDir));
             return new Instruction(Action.FLY);
         }
         // Handling case for if we turned or not 
@@ -47,6 +49,7 @@ public class MoveState extends State {
             // Need to see if we turned before heading to island
             // If we did not turn
             if (currentDir == formerDroneDir) {
+                computer.setDronePosition(currentPos.getForwardPosition(currentDir));
                 return new Instruction(Action.FLY);
             }
             // If we did turn
@@ -58,10 +61,12 @@ public class MoveState extends State {
                 if (formerDroneDir.equals(currentDir.getRightDirection())) {
                     param.put("direction", currentDir.getLeftDirection().toString());
                     computer.setDroneDirection(currentDir.getLeftDirection());
+                    computer.setDronePosition(currentPos.getLeftPosition(currentDir));
                 }
                 else {
                     param.put("direction", currentDir.getRightDirection().toString());
                     computer.setDroneDirection(currentDir.getRightDirection());
+                    computer.setDronePosition(currentPos.getRightPosition(currentDir));
                 }
 
                 return new Instruction(Action.HEADING, param);

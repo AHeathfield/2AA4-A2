@@ -15,6 +15,7 @@ public class ReturnState extends State {
     @Override
     public Instruction determineNextInstruction(JSONObject droneResponse) {
         logger.info("Returning...");
+        computer.displayIslandMap();
         return new Instruction(Action.STOP);
     }
 }
