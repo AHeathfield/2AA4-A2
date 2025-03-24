@@ -33,7 +33,8 @@ public class RotateState extends State {
         // Left: FLY, 3 HEAD.rights, 2 FLY
         // Right: FLY, 3 HEAD.lefts, 2 FLY
         // Backwards: FLY, 3 HEAD.rights, HEAD.left
-        sequenceOfInstructs.add(new Instruction(Action.FLY));
+        // sequenceOfInstructs.add(new Instruction(Action.FLY));    // GETTING RID, will work better with patrol
+        // I will have patrolcoaststate always input a FLY if it needs to turn
 
         for (int i = 0; i < 3; i++) {
             JSONObject param = new JSONObject();
@@ -81,8 +82,8 @@ public class RotateState extends State {
         if (instructCount == sequenceOfInstructs.size()) {
             logger.info("{} rotation COMPLETE!, final direction {}", rotation, droneDir);
             computer.setDroneDirection(droneDir);
-            // computer.setCurrentState(new PatrolCoastState(computer));
-            computer.setCurrentState(new ReturnState(computer));    // Testing
+            computer.setCurrentState(new PatrolCoastState(computer));
+            // computer.setCurrentState(new ReturnState(computer));    // Testing
         }
 
         // SOMEWHERE HERE prob at end just set the computer drone dir to right
