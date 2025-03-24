@@ -30,17 +30,16 @@ public class RotateState extends State {
         // Setting up sequence of instructs 
         // Left: FLY, 3 HEAD.rights, 2 FLY
         // Right: FLY, 3 HEAD.lefts, 2 FLY
+        // Backwards: FLY, 3 HEAD.rights, HEAD.left
         sequenceOfInstructs.add(new Instruction(Action.FLY));
 
-        // Need to add this 3 times
         for (int i = 0; i < 3; i++) {
             JSONObject param = new JSONObject();
             logger.info("Current Drone Dir: {}", droneDir);
 
             if (turn == Turn.LEFT) {
                 droneDir = droneDir.getLeftDirection(); 
-            } 
-            else if (turn == Turn.RIGHT) {
+            } else {
                 droneDir = droneDir.getRightDirection();
             }
 
@@ -49,18 +48,26 @@ public class RotateState extends State {
             sequenceOfInstructs.add(new Instruction(Action.HEADING, param));
         }
 
-        sequenceOfInstructs.add(new Instruction(Action.FLY));
-        sequenceOfInstructs.add(new Instruction(Action.FLY));
+        if (turn == Turn.BACKWARDS) {
+            JSONObject param = new JSONObject();
+            droneDir = droneDir.getLeftDirection();
+            param.put("direction", droneDir.toString());
+            sequenceOfInstructs.add(new Instruction(Action.HEADING, param));
+        } else {
+            sequenceOfInstructs.add(new Instruction(Action.FLY));
+            sequenceOfInstructs.add(new Instruction(Action.FLY));
+        }
     }
 
     // Mimicking rotate player to right or left directions and move forward 1
     @Override
     public Instruction determineNextInstruction(JSONObject droneResponse) {
         
-        String rotation;
+        String rotation = "Backwards"; //default
         if (formerDroneDir.getRightDirection() == droneDir) {
             rotation = "Right";
-        } else {
+        } 
+        else if (formerDroneDir.getLeftDirection() == droneDir) {
             rotation = "Left";
         }
 
