@@ -4,6 +4,9 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
 import static ca.mcmaster.se2aa4.island.teamXXX.LoggerUtil.logger;
+import ca.mcmaster.se2aa4.island.teamXXX.Enums.*;
+import ca.mcmaster.se2aa4.island.teamXXX.Enums.Action;
+import ca.mcmaster.se2aa4.island.teamXXX.States.*;
 import org.json.JSONObject;
 
 // This will be the "brain", it will take current data and determine next moves

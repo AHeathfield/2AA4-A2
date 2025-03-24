@@ -1,4 +1,5 @@
 package ca.mcmaster.se2aa4.island.teamXXX;
+import ca.mcmaster.se2aa4.island.teamXXX.Enums.*;
 
 import org.json.JSONObject;
 

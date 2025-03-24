@@ -1,5 +1,7 @@
-package ca.mcmaster.se2aa4.island.teamXXX;
+package ca.mcmaster.se2aa4.island.teamXXX.States;
 import static ca.mcmaster.se2aa4.island.teamXXX.LoggerUtil.logger;
+import ca.mcmaster.se2aa4.island.teamXXX.*;
+import ca.mcmaster.se2aa4.island.teamXXX.Enums.*;
 import org.json.JSONObject;
 
 // THIS JUST SCANS EVERY TIME SO I CAN SEE THE PATH IT TOOK!!!
