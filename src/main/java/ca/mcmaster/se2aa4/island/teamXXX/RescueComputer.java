@@ -4,7 +4,8 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import static ca.mcmaster.se2aa4.island.teamXXX.LoggerUtil.logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import static eu.ace_design.island.runner.Runner.run;
 import org.json.JSONArray;
 
@@ -14,6 +15,7 @@ import org.json.JSONObject;
 
 // This will be the "brain", it will take current data and determine next moves
 public class RescueComputer implements Computer {
+    private final Logger logger = LogManager.getLogger();
     private Map<Position, JSONObject> islandMap;    // JSON should only be response from SCAN
     private Position dronePos;
     private Direction droneDir;
@@ -39,7 +41,8 @@ public class RescueComputer implements Computer {
 
         // this.instructHistory = new Stack<>();
         this.dronePos = new Position(1, 1);     // I'm not sure if info contains this but it starts at 1,1
-        this.currentState = new SearchState(this);  // First sequence after scan should be a search
+        // this.currentState = new SearchState(this);  
+        this.currentState = new SearchState(this); // First sequence after scan should be a search
         this.nextInstruction = new Instruction(Action.SCAN, new JSONObject());
         this.islandMap = new HashMap<>();
         this.emergencySite = null;
@@ -57,6 +60,8 @@ public class RescueComputer implements Computer {
         this.droneBat -= cost;
         logger.info("The cost of the action was {}", cost);
 
+        
+
         // Updating map (note nextInstruction currently is the prev one)
         if (nextInstruction.getAction() == Action.SCAN) {
             updateMapAtPosition(dronePos, droneResponse);
@@ -72,6 +77,7 @@ public class RescueComputer implements Computer {
                 setDronePosition(dronePos.getRightPosition(droneDir));
             }
         }
+
 
         // This lets the state pattern determine the next instruction based on current state
         nextInstruction = currentState.determineNextInstruction(droneResponse);
@@ -89,9 +95,13 @@ public class RescueComputer implements Computer {
     // Might put the next 2 methods in interface?
     // Leaky abstractions?? Its ok lol
     // Getters
+    public int getDroneBattery() { return droneBat; }
     public Direction getDroneDirection() { return droneDir; }
     public Position getDronePosition() { return dronePos; } 
     public JSONObject getMapValueAtPosition(Position position) { return islandMap.get(position); }
+
+    private boolean isCurrentPositionMarked() { return islandMap.containsKey(dronePos); }
+    public boolean isMapPositionMarked(Position pos) { return islandMap.containsKey(pos); }
 
     // Setters
     private void updateMapAtPosition(Position position, JSONObject landInfo) {

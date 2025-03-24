@@ -86,6 +86,8 @@ public class Explorer implements IExplorerRaid {
 
     @Override
     public String deliverFinalReport() {
+        RescueComputer temp = (RescueComputer) computer;
+        logger.info("FINALY BATTERY: {}", temp.getDroneBattery());
         return "no creek found";
     }
 

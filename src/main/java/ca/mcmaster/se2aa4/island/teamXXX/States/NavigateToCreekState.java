@@ -1,12 +1,14 @@
 package ca.mcmaster.se2aa4.island.teamXXX.States;
 
 import org.json.JSONObject;
-import static ca.mcmaster.se2aa4.island.teamXXX.LoggerUtil.logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ca.mcmaster.se2aa4.island.teamXXX.RescueComputer;
 import ca.mcmaster.se2aa4.island.teamXXX.Enums.*;
 import ca.mcmaster.se2aa4.island.teamXXX.*;
 
 public class NavigateToCreekState extends State {
+    private final Logger logger = LogManager.getLogger();
 
     public NavigateToCreekState(RescueComputer computer) {
         super(computer);
@@ -29,9 +31,7 @@ public class NavigateToCreekState extends State {
             logger.info("Arrived at creek! landing!");
 
             String creekId = computer.getCreekId(creekPos);
-            logger.info("creek id: " + creekId);
             int people = computer.getAvailableCrewMembers();
-            logger.info("people: " + people);
 
             param.put("creek", creekId);
             param.put("people", people);
