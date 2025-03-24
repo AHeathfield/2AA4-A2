@@ -39,7 +39,7 @@ public class RotateState extends State {
             JSONObject param = new JSONObject();
             logger.info("Current Drone Dir: {}", droneDir);
 
-            if (turn == Turn.LEFT) {
+            if (turn == Turn.RIGHT) {
                 droneDir = droneDir.getLeftDirection(); 
             } else {
                 droneDir = droneDir.getRightDirection();
@@ -81,7 +81,8 @@ public class RotateState extends State {
         if (instructCount == sequenceOfInstructs.size()) {
             logger.info("{} rotation COMPLETE!, final direction {}", rotation, droneDir);
             computer.setDroneDirection(droneDir);
-            computer.setCurrentState(new PatrolCoastState(computer));
+            // computer.setCurrentState(new PatrolCoastState(computer));
+            computer.setCurrentState(new ReturnState(computer));    // Testing
         }
 
         // SOMEWHERE HERE prob at end just set the computer drone dir to right
