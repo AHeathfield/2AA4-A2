@@ -1,5 +1,6 @@
 package ca.mcmaster.se2aa4.island.teamXXX.States;
-import static ca.mcmaster.se2aa4.island.teamXXX.LoggerUtil.logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ca.mcmaster.se2aa4.island.teamXXX.*;
 import ca.mcmaster.se2aa4.island.teamXXX.Enums.*;
 import org.json.JSONObject;
@@ -7,6 +8,7 @@ import org.json.JSONObject;
 // THIS JUST SCANS EVERY TIME SO I CAN SEE THE PATH IT TOOK!!!
 public class TestMoveState extends State {
     // private Instruction instructFromLastState;  // The instruction that lead into this state
+    private final Logger logger = LogManager.getLogger();
     private boolean lastActionWasTestSCAN = false;
     private boolean isFirstRun = true;
     private Direction formerDroneDir;   // Useful for when it turns to know what dir it was before
