@@ -8,7 +8,7 @@ public class MoveState extends State {
     private Direction formerDroneDir;   // Useful for when it turns to know what dir it was before
     private int islandDistance;
 
-    private boolean gridSearch = true; // Set this to true if you want to do grid search
+    private boolean gridSearch = false; // Set this to true if you want to do grid search
     private boolean testing = false;     // Set this to true if you want to do test state
 
     // Constructor
@@ -74,7 +74,7 @@ public class MoveState extends State {
         }
         else {
             logger.info("Island has been reached!");
-            computer.setCurrentState(new ReturnState(computer));
+            computer.setCurrentState(new PatrolCoastState(computer));
             return new Instruction(Action.SCAN);
         }
     }
