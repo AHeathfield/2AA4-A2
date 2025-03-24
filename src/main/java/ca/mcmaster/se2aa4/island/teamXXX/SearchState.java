@@ -6,14 +6,10 @@ import org.json.JSONObject;
 public class SearchState extends State {
     private final Logger logger = LogManager.getLogger();
     private Direction lastEchoDir;
-    // private int islandRange;
-    // private boolean islandFound;
 
     // Constructor
     public SearchState(RescueComputer computer) {
         super(computer);
-        // this.islandRange = 0;
-        // this.islandFound = false;
     }
 
     @Override
@@ -41,8 +37,7 @@ public class SearchState extends State {
         // If there is an island that has been scanned
         else {
             logger.info("Island has been found! It is {}m away", range);
-            computer.setDistanceToIsland(range + 1);    // Letting computer know how far island is
-            return nextMoveInstruction(droneDir);
+            return nextMoveInstruction(droneDir, range + 1);
         }
     }
 
@@ -72,21 +67,21 @@ public class SearchState extends State {
         }
     }
 
-    private Instruction nextMoveInstruction(Direction droneDir) {
+    private Instruction nextMoveInstruction(Direction droneDir, int range) {
         JSONObject param = new JSONObject();
 
         if (lastEchoDir == droneDir) {
-            computer.setCurrentState(new MoveState(computer));
+            computer.setCurrentState(new MoveState(computer, computer.getDroneDirection(), range));
             return new Instruction(Action.FLY);
         }
         else if (lastEchoDir == droneDir.getRightDirection()) {
-            computer.setCurrentState(new MoveState(computer));
+            computer.setCurrentState(new MoveState(computer, computer.getDroneDirection(), range));
             param.put("direction", droneDir.getRightDirection().toString());
             computer.setDroneDirection(droneDir.getRightDirection());
             return new Instruction(Action.HEADING, param);
         }
         else {
-            computer.setCurrentState(new MoveState(computer));
+            computer.setCurrentState(new MoveState(computer, computer.getDroneDirection(), range));
             param.put("direction", droneDir.getLeftDirection().toString());
             computer.setDroneDirection(droneDir.getLeftDirection());
             return new Instruction(Action.HEADING, param);
