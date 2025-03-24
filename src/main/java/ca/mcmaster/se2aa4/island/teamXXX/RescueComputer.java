@@ -21,6 +21,7 @@ public class RescueComputer implements Computer {
 
     private Position emergencySite;
     private Set<Position> creeksFound;
+    private Position nearestCreek;
 
     private State currentState;
 
@@ -136,10 +137,10 @@ public class RescueComputer implements Computer {
         return null;
     }
 
-    public Position findNearestCreekToSite() {
+    public void calcNearestCreekToSite() {
         if (emergencySite == null) {
             logger.info("No emergency site found");
-            return null;
+            return;
         }
 
         Position nearestCreek = null;
@@ -154,6 +155,10 @@ public class RescueComputer implements Computer {
             }
         }
 
+        this.nearestCreek = nearestCreek;
+    }
+
+    public Position getNearestCreekPosition() {
         return nearestCreek;
     }
 

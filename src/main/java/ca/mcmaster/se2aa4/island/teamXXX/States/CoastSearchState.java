@@ -41,6 +41,7 @@ public class CoastSearchState extends State {
             computer.setEmergencySite(dronePos);
             computer.displayIslandMap();
             computer.displayCreeks();
+            computer.calcNearestCreekToSite();
             return new Instruction(Action.STOP, param);
         }
 
