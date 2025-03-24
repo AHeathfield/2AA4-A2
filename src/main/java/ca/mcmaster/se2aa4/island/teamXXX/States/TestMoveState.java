@@ -18,7 +18,7 @@ public class TestMoveState extends State {
     public TestMoveState(RescueComputer computer, Direction formerDroneDir, int islandDistance) {
         super(computer);
         this.formerDroneDir = formerDroneDir;
-        this.islandDistance = islandDistance;
+        this.islandDistance = islandDistance + 1;   // for testing...
     }
 
 
@@ -78,7 +78,7 @@ public class TestMoveState extends State {
             }
             else {
                 logger.info("Island has been reached!");
-                computer.setCurrentState(new RotateState(computer, Turn.BACKWARDS, formerDroneDir)); // TEST: rotate right
+                computer.setCurrentState(new RotateState(computer, Turn.LEFT, formerDroneDir)); // TEST: rotate right
                 return new Instruction(Action.SCAN);
             }
         }
