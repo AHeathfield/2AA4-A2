@@ -41,7 +41,7 @@ public class MoveState extends State {
         // If we are not at island yet
         if (islandDistance > 1) {
             logger.info("Island is currently {}m away.", islandDistance);
-            computer.setDronePosition(currentPos.getForwardPosition(currentDir));
+            computer.setDronePosition(currentPos.getPosition(currentDir, Turn.FORWARDS));
             return new Instruction(Action.FLY);
         }
         // Handling case for if we turned or not 
@@ -52,7 +52,7 @@ public class MoveState extends State {
             // Need to see if we turned before heading to island
             // If we did not turn
             if (currentDir == formerDroneDir) {
-                computer.setDronePosition(currentPos.getForwardPosition(currentDir));
+                computer.setDronePosition(currentPos.getPosition(currentDir, Turn.FORWARDS));
                 return new Instruction(Action.FLY);
             }
             // If we did turn
@@ -64,12 +64,12 @@ public class MoveState extends State {
                 if (formerDroneDir.equals(currentDir.getRightDirection())) {
                     param.put("direction", currentDir.getLeftDirection().toString());
                     computer.setDroneDirection(currentDir.getLeftDirection());
-                    computer.setDronePosition(currentPos.getLeftPosition(currentDir));
+                    computer.setDronePosition(currentPos.getPosition(currentDir, Turn.LEFT));
                 }
                 else {
                     param.put("direction", currentDir.getRightDirection().toString());
                     computer.setDroneDirection(currentDir.getRightDirection());
-                    computer.setDronePosition(currentPos.getRightPosition(currentDir));
+                    computer.setDronePosition(currentPos.getPosition(currentDir, Turn.RIGHT));
                 }
 
                 return new Instruction(Action.HEADING, param);
@@ -90,7 +90,7 @@ public class MoveState extends State {
     private Instruction gridSearch_NextInstruction(Direction currentDir, Position currentPos) {
         if (islandDistance > 0) {
             logger.info("Island is currently {}m away.", islandDistance);
-            computer.setDronePosition(currentPos.getForwardPosition(currentDir));
+            computer.setDronePosition(currentPos.getPosition(currentDir, Turn.FORWARDS));
             return new Instruction(Action.FLY);
         }
         else {

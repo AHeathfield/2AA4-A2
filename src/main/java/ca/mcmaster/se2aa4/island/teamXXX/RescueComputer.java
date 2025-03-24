@@ -63,14 +63,14 @@ public class RescueComputer implements Computer {
             updateMapAtPosition(dronePos, droneResponse);
         }
         else if (nextInstruction.getAction() == Action.FLY) {
-            setDronePosition(dronePos.getForwardPosition(droneDir));
+            setDronePosition(dronePos.getPosition(droneDir, Turn.FORWARDS));
         }
         else if (nextInstruction.getAction() == Action.HEADING) {
             String direction = nextInstruction.getParameters().getString("direction");
             if (direction.equals(droneDir.getLeftDirection().toString())) {
-                setDronePosition(dronePos.getLeftPosition(droneDir));
+                setDronePosition(dronePos.getPosition(droneDir, Turn.LEFT));
             } else {
-                setDronePosition(dronePos.getRightPosition(droneDir));
+                setDronePosition(dronePos.getPosition(droneDir, Turn.RIGHT));
             }
         }
 
