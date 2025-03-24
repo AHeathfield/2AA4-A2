@@ -2,6 +2,7 @@ package ca.mcmaster.se2aa4.island.teamXXX;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 import static ca.mcmaster.se2aa4.island.teamXXX.LoggerUtil.logger;
 import ca.mcmaster.se2aa4.island.teamXXX.Enums.*;
@@ -16,6 +17,9 @@ public class RescueComputer implements Computer {
     private Direction droneDir;
     private Integer droneBat;
     private Instruction nextInstruction;
+
+    private Position emergencySite;
+    private Set<Position> creeksFound;
 
     private State currentState;
 
@@ -32,6 +36,8 @@ public class RescueComputer implements Computer {
         this.currentState = new SearchState(this);  // First sequence after scan should be a search
         this.nextInstruction = new Instruction(Action.SCAN, new JSONObject());
         this.islandMap = new HashMap<>();
+        this.emergencySite = null;
+        this.creeksFound = new HashSet<>();
     }
 
     // Idea is have processData save the values that should be saved each time and let
@@ -80,6 +86,13 @@ public class RescueComputer implements Computer {
     public void setDronePosition(Position pos) {
         dronePos = pos;
     }
+    public void setEmergencySite(Position pos) {
+        emergencySite = pos;
+    }
+
+    public void addCreekFound(Position pos) {
+        creeksFound.add(pos);
+    }
 
     // Displays the map for debugging!
     public void displayIslandMap() {
@@ -103,4 +116,5 @@ public class RescueComputer implements Computer {
         }
         return null;
     }
+
 }
