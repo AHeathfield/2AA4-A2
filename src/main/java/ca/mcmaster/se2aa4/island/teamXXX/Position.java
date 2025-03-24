@@ -43,6 +43,28 @@ public class Position {
         return pos;
     }
 
+    // This is the position Behind the drone
+    public Position getBackwardPosition(Direction currentDir) {
+        Position pos = new Position();
+        switch (currentDir) {
+            case Direction.EAST:
+                pos = new Position(this.x - 1, this.y);
+                break;
+            case Direction.WEST:
+                pos = new Position(this.x + 1, this.y);
+                break;
+            case Direction.NORTH:
+                pos = new Position(this.x, this.y + 1);
+                break;
+            case Direction.SOUTH:
+                pos = new Position(this.x, this.y - 1);
+                break;
+        }
+
+        return pos;
+    }
+
+    // This is the position if you were HEADING right
     public Position getRightPosition(Direction currentDir) {
         Position pos = new Position();
         switch (currentDir) {
@@ -63,6 +85,7 @@ public class Position {
         return pos;
     }
     
+    // This is the position if you were HEADING Left
     public Position getLeftPosition(Direction currentDir) {
         Position pos = new Position();
         switch (currentDir) {
@@ -77,6 +100,48 @@ public class Position {
                 break;
             case Direction.SOUTH:
                 pos = new Position(this.x + 1, this.y + 1);
+                break;
+        }
+
+        return pos;
+    }
+
+    // This is the position if you were right to move directly right
+    public Position getHardRightPosition(Direction currentDir) {
+        Position pos = new Position();
+        switch (currentDir) {
+            case Direction.EAST:
+                pos = new Position(this.x, this.y + 1);
+                break;
+            case Direction.WEST:
+                pos = new Position(this.x, this.y - 1);
+                break;
+            case Direction.NORTH:
+                pos = new Position(this.x + 1, this.y);
+                break;
+            case Direction.SOUTH:
+                pos = new Position(this.x - 1, this.y);
+                break;
+        }
+
+        return pos;
+    }
+    
+    // This is the position if you were to move directly left
+    public Position getHardLeftPosition(Direction currentDir) {
+        Position pos = new Position();
+        switch (currentDir) {
+            case Direction.EAST:
+                pos = new Position(this.x, this.y - 1);
+                break;
+            case Direction.WEST:
+                pos = new Position(this.x, this.y + 1);
+                break;
+            case Direction.NORTH:
+                pos = new Position(this.x - 1, this.y);
+                break;
+            case Direction.SOUTH:
+                pos = new Position(this.x + 1, this.y);
                 break;
         }
 
