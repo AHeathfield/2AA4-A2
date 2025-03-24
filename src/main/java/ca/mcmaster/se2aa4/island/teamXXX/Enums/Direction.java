@@ -1,4 +1,5 @@
-package ca.mcmaster.se2aa4.island.teamXXX;
+package ca.mcmaster.se2aa4.island.teamXXX.Enums;
+
 
 public enum Direction {
     NORTH(null, null, "N"),

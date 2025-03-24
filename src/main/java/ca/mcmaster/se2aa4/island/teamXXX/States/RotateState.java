@@ -1,10 +1,12 @@
-package ca.mcmaster.se2aa4.island.teamXXX;
+package ca.mcmaster.se2aa4.island.teamXXX.States;
 
 import java.util.List;
 import java.util.ArrayList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
+import ca.mcmaster.se2aa4.island.teamXXX.Enums.*;
+import ca.mcmaster.se2aa4.island.teamXXX.*;
 
 // This is too help traverse coast line, it does not consider edge cases
 public class RotateState extends State {

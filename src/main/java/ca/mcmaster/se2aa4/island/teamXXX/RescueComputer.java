@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import static ca.mcmaster.se2aa4.island.teamXXX.LoggerUtil.logger;
+import static eu.ace_design.island.runner.Runner.run;
+
+import ca.mcmaster.se2aa4.island.teamXXX.Enums.*;
+import ca.mcmaster.se2aa4.island.teamXXX.States.*;
 import org.json.JSONObject;
 
 // This will be the "brain", it will take current data and determine next moves
@@ -51,6 +55,17 @@ public class RescueComputer implements Computer {
         // Updating map (note nextInstruction currently is the prev one)
         if (nextInstruction.getAction() == Action.SCAN) {
             updateMapAtPosition(dronePos, droneResponse);
+        }
+        else if (nextInstruction.getAction() == Action.FLY) {
+            setDronePosition(dronePos.getForwardPosition(droneDir));
+        }
+        else if (nextInstruction.getAction() == Action.HEADING) {
+            String direction = nextInstruction.getParameters().getString("direction");
+            if (direction.equals(droneDir.getLeftDirection().toString())) {
+                setDronePosition(dronePos.getLeftPosition(droneDir));
+            } else {
+                setDronePosition(dronePos.getRightPosition(droneDir));
+            }
         }
 
         // This lets the state pattern determine the next instruction based on current state
@@ -105,6 +120,13 @@ public class RescueComputer implements Computer {
         }
     }
 
+    public void displayCreeks() {
+        logger.info("Creeks found: ");
+        for (Position creek : creeksFound) {
+            logger.info("Position: ({}, {})", creek.x, creek.y);
+        }
+    }
+
     private Direction stringToDirection(String string) {
         for (Direction dir : Direction.values()){
             if (dir.toString().equals(string)){
@@ -114,4 +136,30 @@ public class RescueComputer implements Computer {
         return null;
     }
 
+    public Position findNearestCreekToSite() {
+        if (emergencySite == null) {
+            logger.info("No emergency site found");
+            return null;
+        }
+
+        Position nearestCreek = null;
+        double shortestDistance = Double.MAX_VALUE;
+
+        // go through all creeks and find creek position with shortest distance to site
+        for (Position creek : creeksFound) {
+            double distance = calculateDistance(emergencySite, creek);
+            if (distance < shortestDistance) {
+                shortestDistance = distance;
+                nearestCreek = creek;
+            }
+        }
+
+        return nearestCreek;
+    }
+
+    private double calculateDistance(Position pos1, Position pos2) {
+        int dx = pos1.x - pos2.x;
+        int dy = pos1.y - pos2.y;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
 }
