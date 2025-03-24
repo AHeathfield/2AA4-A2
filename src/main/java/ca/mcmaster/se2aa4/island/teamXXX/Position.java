@@ -1,4 +1,5 @@
 package ca.mcmaster.se2aa4.island.teamXXX;
+import ca.mcmaster.se2aa4.island.teamXXX.Enums.Direction;
 
 // This is holds x and y coordinates, NOTE down is +y
 public class Position {

@@ -1,6 +1,8 @@
 package ca.mcmaster.se2aa4.island.teamXXX;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ca.mcmaster.se2aa4.island.teamXXX.*;
+import ca.mcmaster.se2aa4.island.teamXXX.Enums.*;
 import org.json.JSONObject;
 
 // THIS JUST SCANS EVERY TIME SO I CAN SEE THE PATH IT TOOK!!!
@@ -22,7 +24,7 @@ public class TestMoveState extends State {
 
     // For now these will just be the STOP action
     @Override
-    public Instruction determineNextInstruction() {
+    public Instruction determineNextInstruction(JSONObject droneResponse) {
         // To account for move going into state
         if (isFirstRun) {
             decrementDistanceToIsland();
