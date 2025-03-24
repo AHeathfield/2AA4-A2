@@ -18,8 +18,14 @@ public class Instruction {
     public Action getAction() {
         return this.action;
     }
-
     public JSONObject getParameters() {
         return this.params;
+    }
+
+    public void setAction(Action action) {
+        this.action = action;
+    }
+    public void setParameters(JSONObject params) {
+        this.params = params;
     }
 }

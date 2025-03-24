@@ -30,9 +30,9 @@ public class RotateState extends State {
         this.sequenceOfInstructs = new ArrayList<>();
 
         // Setting up sequence of instructs 
-        // Left: FLY, 3 HEAD.rights, 2 FLY
-        // Right: FLY, 3 HEAD.lefts, 2 FLY
-        // Backwards: FLY, 3 HEAD.rights, HEAD.left
+        // Left: 3 HEAD.rights, 2 FLY
+        // Right: 3 HEAD.lefts, 2 FLY
+        // Backwards: 3 HEAD.rights, HEAD.left
         // sequenceOfInstructs.add(new Instruction(Action.FLY));    // GETTING RID, will work better with patrol
         // I will have patrolcoaststate always input a FLY if it needs to turn
 
