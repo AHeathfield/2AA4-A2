@@ -7,6 +7,7 @@ import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import static eu.ace_design.island.runner.Runner.run;
+import org.json.JSONArray;
 
 import ca.mcmaster.se2aa4.island.teamXXX.Enums.*;
 import ca.mcmaster.se2aa4.island.teamXXX.States.*;
@@ -20,6 +21,8 @@ public class RescueComputer implements Computer {
     private Direction droneDir;
     private Integer droneBat;
     private Instruction nextInstruction;
+    private int crewMembers;
+    private Map<Position, Integer> overwritten = new HashMap<>();
 
     private Position emergencySite;
     private Set<Position> creeksFound;
@@ -34,6 +37,7 @@ public class RescueComputer implements Computer {
         this.droneBat = info.getInt("budget");
         logger.info("The drone is facing {}", droneDir.toString());
         logger.info("Battery level is {}", droneBat);
+        this.crewMembers = info.getInt("men");
 
         // this.instructHistory = new Stack<>();
         this.dronePos = new Position(1, 1);     // I'm not sure if info contains this but it starts at 1,1
@@ -81,7 +85,10 @@ public class RescueComputer implements Computer {
 
     @Override
     public Instruction getNextInstruction() {
-        // I believe nextInstruction is properly handled by the state pattern
+        
+        // logger.info("drone battery: {}", droneBat);
+        logger.info("drone position: ({}, {})", dronePos.x, dronePos.y);
+        // logger.info("drone direction: {}", droneDir.toString());
         return nextInstruction;
     } 
 
@@ -98,7 +105,18 @@ public class RescueComputer implements Computer {
 
     // Setters
     private void updateMapAtPosition(Position position, JSONObject landInfo) {
+        if (creeksFound.contains(position)) {
+            logger.info("creek already found at position ({}, {})", position.x, position.y);
+            overwritten.putIfAbsent(position, 1);
+            overwritten.put(position, overwritten.get(position) + 1);
+            return;
+        }
+
         islandMap.put(position, landInfo);
+        if (landInfo.getJSONObject("extras").getJSONArray("creeks").length() > 0) {
+            logger.info("adding creek");
+            addCreekFound(position);
+        }
     }
     public void setCurrentState(State state) {
         currentState = state;
@@ -117,6 +135,10 @@ public class RescueComputer implements Computer {
         creeksFound.add(pos);
     }
 
+    public boolean isCreek(Position pos) {
+        return creeksFound.contains(pos);
+    }
+
     // Displays the map for debugging!
     public void displayIslandMap() {
         logger.info("Map size: {}", islandMap.size());
@@ -129,6 +151,7 @@ public class RescueComputer implements Computer {
             // logger.info("Value: " + jsonObject.toString());
             // System.out.println(); // Add a blank line for better readability
         }
+        logger.info(overwritten.toString());
     }
 
     public void displayCreeks() {
@@ -138,7 +161,7 @@ public class RescueComputer implements Computer {
         }
     }
 
-    private Direction stringToDirection(String string) {
+    public Direction stringToDirection(String string) {
         for (Direction dir : Direction.values()){
             if (dir.toString().equals(string)){
                 return dir;
@@ -176,5 +199,19 @@ public class RescueComputer implements Computer {
         int dx = pos1.x - pos2.x;
         int dy = pos1.y - pos2.y;
         return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    public int getAvailableCrewMembers() {
+        return crewMembers - 1;
+    }
+
+    public String getCreekId(Position pos) {
+        if (creeksFound.contains(pos)) {
+            JSONArray creeks = islandMap.get(pos).getJSONObject("extras").getJSONArray("creeks");
+            logger.info(creeks.toString());
+            return creeks.getString(0);
+        }
+        logger.info("no creek found at position ({}, {})", pos.x, pos.y);
+        return null;
     }
 }

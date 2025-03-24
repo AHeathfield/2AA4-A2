@@ -29,7 +29,6 @@ public class CoastSearchState extends State {
         Position dronePos = computer.getDronePosition();
 
         // proceeding through column
-        logger.info("scannned, still searching for creek");
         JSONArray creeksJSON = droneResponse.getJSONObject("extras").getJSONArray("creeks");
         overCreek = creeksJSON.length() > 0;
 
@@ -38,19 +37,25 @@ public class CoastSearchState extends State {
         siteFound = sitesJSON.length() > 0;
         if (siteFound) {
             logger.info("------------- Site found ----------------");
+
             computer.setEmergencySite(dronePos);
-            computer.displayIslandMap();
-            computer.displayCreeks();
             computer.calcNearestCreekToSite();
-            return new Instruction(Action.STOP, param);
+
+            logger.info("Nearest creek to site: " + computer.getNearestCreekPosition().toString());
+            logger.info("Site position: " + computer.getDronePosition().toString());
+
+            computer.setCurrentState(new NavigateToCreekState(computer));
+            // doesn't really matter what instruction
+            return new Instruction(Action.SCAN, param);
         }
 
         // check if over creek
-        if (overCreek) {
-            logger.info("------------- Over creek ----------------");
-            computer.addCreekFound(dronePos);
-            //return new Instruction(Action.STOP, param);
-        }
+        // if (overCreek) {
+        //     logger.info("------------- Over creek ----------------");
+            
+        //     computer.addCreekFound(dronePos);
+        //     //return new Instruction(Action.STOP, param);
+        // }
 
         JSONArray biomesJSON = droneResponse.getJSONObject("extras").getJSONArray("biomes");
         List<String> biomes = new ArrayList<String>(biomesJSON.length());

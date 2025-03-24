@@ -10,7 +10,7 @@ import ca.mcmaster.se2aa4.island.teamXXX.*;
 public class NavigateToCreekState extends State {
     private final Logger logger = LogManager.getLogger();
 
-    public NavigateToCreekState(RescueComputer computer, int creekX, int creekY) {
+    public NavigateToCreekState(RescueComputer computer) {
         super(computer);
     }
 
@@ -23,33 +23,42 @@ public class NavigateToCreekState extends State {
         int deltaX = creekPos.x - dronePos.x;
         int deltaY = creekPos.y - dronePos.y;
 
-        if (deltaX == 0 && deltaY == 0) {
+        logger.info("creek position: (" + creekPos.x + ", " + creekPos.y + ")");
+        logger.info("delta x: " + deltaX);
+        logger.info("delta y: " + deltaY);
+
+        if ((deltaX == 0 && deltaY == 0) || computer.isCreek(dronePos)) {
             logger.info("Arrived at creek! landing!");
-            return new Instruction(Action.LAND);
+
+            String creekId = computer.getCreekId(creekPos);
+            int people = computer.getAvailableCrewMembers();
+
+            param.put("creek", creekId);
+            param.put("people", people);
+
+            computer.setCurrentState(new  ReturnState(computer));
+            return new Instruction(Action.LAND, param);
         }
 
         // handle facing the right y direction
-        if (deltaY > 0 && droneDir == Direction.NORTH || deltaY < 0 && droneDir == Direction.SOUTH) {
-            // u turn!
-            
+        if ((deltaY > 0 && droneDir == Direction.NORTH) || (deltaY < 0 && droneDir == Direction.SOUTH)) {
+            // u turn
+            logger.info("taking u turn");
+            computer.setCurrentState(new NavigateRotateState(computer, Turn.BACKWARDS));
+            return new Instruction(Action.FLY, param);
         }
 
-        // handle case of starting with delta y = 0
-        if (deltaY == 0) {
-            //  hard turn
-        }
+        // if starting at correct x value, already facing right way
+        // if (deltaX == 0) {
+        //     logger.info("Drone at creek's x position");
 
-        // if starting at correct x value
-        if (deltaX == 0) {
-            logger.info("Drone at creek's x position");
-
-            // drone is heading towards creek
-            if (deltaY > 0 && droneDir == Direction.SOUTH) {
-                return new Instruction(Action.FLY, param);
-            } else if (deltaY < 0 && droneDir == Direction.NORTH) {
-                return new Instruction(Action.FLY, param);
-            }
-        }
+        //     // drone is heading towards creek
+        //     if (deltaY > 0 && droneDir == Direction.SOUTH) {
+        //         return new Instruction(Action.FLY, param);
+        //     } else if (deltaY < 0 && droneDir == Direction.NORTH) {
+        //         return new Instruction(Action.FLY, param);
+        //     }
+        // }
 
         if (droneDir == Direction.NORTH || droneDir == Direction.SOUTH) {
             return handleYMovement(deltaX, deltaY, droneDir, dronePos, creekPos);
@@ -65,7 +74,20 @@ public class NavigateToCreekState extends State {
 
     private Instruction handleYMovement(int deltaX, int deltaY, Direction droneDir, Position dronePos, Position creekPos) {
         JSONObject param = new JSONObject();
-        if (deltaY == 1) {
+        // handle case of starting with delta y = 0
+        if (deltaY == 0) {
+            //  hard turn
+            if (deltaX > 0 && droneDir == Direction.NORTH || deltaX < 0 && droneDir == Direction.SOUTH) {
+                logger.info("taking hard turn right");
+                computer.setCurrentState(new NavigateRotateState(computer, Turn.RIGHT));
+                return new Instruction(Action.FLY, param);
+            } else {
+                logger.info("taking hard turn left");
+                computer.setCurrentState(new NavigateRotateState(computer, Turn.LEFT));
+                return new Instruction(Action.FLY, param);
+            }
+        }
+        else if (deltaY == 1) {
             // turn in drone dir
             if (deltaX > 0) {
                 param.put("direction", Direction.EAST.toString());
