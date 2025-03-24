@@ -119,6 +119,13 @@ public class RescueComputer implements Computer {
         }
     }
 
+    public void displayCreeks() {
+        logger.info("Creeks found: ");
+        for (Position creek : creeksFound) {
+            logger.info("Position: ({}, {})", creek.x, creek.y);
+        }
+    }
+
     private Direction stringToDirection(String string) {
         for (Direction dir : Direction.values()){
             if (dir.toString().equals(string)){
