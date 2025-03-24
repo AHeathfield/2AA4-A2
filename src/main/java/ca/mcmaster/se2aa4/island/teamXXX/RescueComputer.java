@@ -3,13 +3,11 @@ package ca.mcmaster.se2aa4.island.teamXXX;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import static ca.mcmaster.se2aa4.island.teamXXX.LoggerUtil.logger;
 import org.json.JSONObject;
 
 // This will be the "brain", it will take current data and determine next moves
 public class RescueComputer implements Computer {
-    private final Logger logger = LogManager.getLogger();
     private Map<Position, JSONObject> islandMap;    // JSON should only be response from SCAN
     private Position dronePos;
     private Direction droneDir;
