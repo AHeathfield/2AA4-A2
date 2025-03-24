@@ -3,9 +3,16 @@ import static ca.mcmaster.se2aa4.island.teamXXX.LoggerUtil.logger;
 import org.json.JSONObject;
 
 public class MoveState extends State {
+<<<<<<< HEAD:src/main/java/ca/mcmaster/se2aa4/island/teamXXX/MoveState.java
+    private final Logger logger = LogManager.getLogger();
+=======
     private boolean testing = true;     // Set this to true if you want to do test state
+>>>>>>> 85aa20918b4ed8b7b72e6a327ba7b06d70a4c629:src/main/java/ca/mcmaster/se2aa4/island/teamXXX/States/MoveState.java
     private Direction formerDroneDir;   // Useful for when it turns to know what dir it was before
     private int islandDistance;
+
+    private boolean gridSearch = false; // Set this to true if you want to do grid search
+    private boolean testing = true;     // Set this to true if you want to do test state
 
     // Constructor
     public MoveState(RescueComputer computer, Direction formerDroneDir, int islandDistance) {
@@ -23,15 +30,13 @@ public class MoveState extends State {
             return new Instruction(Action.SCAN);
         }
 
-
-
-
         decrementDistanceToIsland();    // Remember it enters this state after it's already started moving!
         Direction currentDir = computer.getDroneDirection();
         Position currentPos = computer.getDronePosition();
         // TODO: Need to handle the special case where the island is right beside it
         // ANSWER: treat it like a coast search??
         
+        if (gridSearch) return gridSearch_NextInstruction(currentDir, currentPos);
 
         // If we are not at island yet
         if (islandDistance > 1) {
@@ -79,5 +84,18 @@ public class MoveState extends State {
 
     private void decrementDistanceToIsland() {
         islandDistance--;
+    }
+
+    private Instruction gridSearch_NextInstruction(Direction currentDir, Position currentPos) {
+        if (islandDistance > 0) {
+            logger.info("Island is currently {}m away.", islandDistance);
+            computer.setDronePosition(currentPos.getForwardPosition(currentDir));
+            return new Instruction(Action.FLY);
+        }
+        else {
+            logger.info("Island has been reached!");
+            computer.setCurrentState(new CoastSearchState(computer));
+            return new Instruction(Action.SCAN);
+        }
     }
 }
