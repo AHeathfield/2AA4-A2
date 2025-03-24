@@ -13,6 +13,7 @@ public class SearchState extends State {
     @Override
     public Instruction determineNextInstruction(JSONObject droneResponse) {
         Direction droneDir = computer.getDroneDirection(); 
+        Position dronePos = computer.getDronePosition();
         JSONObject param = new JSONObject();    // Stores the params for the next Instruction
 
         // First instruction case (echo forward)
@@ -30,18 +31,18 @@ public class SearchState extends State {
         // if no island in range no island is found
         if (islandNotFound) {
             logger.info("No Island found, continuing scan");
-            return nextSearchInstruction(droneDir);
+            return nextSearchInstruction(droneDir, dronePos);
         }
         // If there is an island that has been scanned
         else {
             logger.info("Island has been found! It is {}m away", range);
-            return nextMoveInstruction(droneDir, range + 1);
+            return nextMoveInstruction(droneDir, dronePos, range + 1);
         }
     }
 
 
     // These are just helpers to help organize code
-    private Instruction nextSearchInstruction(Direction droneDir) {
+    private Instruction nextSearchInstruction(Direction droneDir, Position dronePos) {
         JSONObject param = new JSONObject();
         if (lastEchoDir == droneDir) {
             logger.info("echoing right");
@@ -61,27 +62,31 @@ public class SearchState extends State {
         else {
             // I don't think we should change the state to MoveState because it's just moving forward to continue search
             lastEchoDir = null;     // Null to essentially restart the search sequence
+            computer.setDronePosition(dronePos.getForwardPosition(droneDir));
             return new Instruction(Action.FLY);
         }
     }
 
-    private Instruction nextMoveInstruction(Direction droneDir, int range) {
+    private Instruction nextMoveInstruction(Direction droneDir, Position dronePos, int range) {
         JSONObject param = new JSONObject();
 
         if (lastEchoDir == droneDir) {
             computer.setCurrentState(new MoveState(computer, computer.getDroneDirection(), range));
+            computer.setDronePosition(dronePos.getForwardPosition(droneDir));
             return new Instruction(Action.FLY);
         }
         else if (lastEchoDir == droneDir.getRightDirection()) {
             computer.setCurrentState(new MoveState(computer, computer.getDroneDirection(), range));
             param.put("direction", droneDir.getRightDirection().toString());
             computer.setDroneDirection(droneDir.getRightDirection());
+            computer.setDronePosition(dronePos.getRightPosition(droneDir));
             return new Instruction(Action.HEADING, param);
         }
         else {
             computer.setCurrentState(new MoveState(computer, computer.getDroneDirection(), range));
             param.put("direction", droneDir.getLeftDirection().toString());
             computer.setDroneDirection(droneDir.getLeftDirection());
+            computer.setDronePosition(dronePos.getLeftPosition(droneDir));
             return new Instruction(Action.HEADING, param);
         }
     }
