@@ -35,16 +35,6 @@ public class PatrolCoastState extends State {
             return new Instruction(Action.ECHO, param);
         }
 
-        // if (needToScan) {
-        //     needToScan = false;
-        //     return new Instruction(Action.SCAN);
-        // }
-        // else if (firstInstruction || lastEchoDir == null) {
-        //     firstInstruction = false;
-        //     param.put("direction", droneDir.getRightDirection().toString());
-        //     lastEchoDir = droneDir.getRightDirection();
-        //     return new Instruction(Action.ECHO, param);
-        // }
 
         // This is where we check if anything is found
         boolean landNotFound = droneResponse.getJSONObject("extras").get("found").equals("OUT_OF_RANGE");

@@ -66,7 +66,6 @@ public class SearchState extends State {
         else {
             // I don't think we should change the state to MoveState because it's just moving forward to continue search
             lastEchoDir = null;     // Null to essentially restart the search sequence
-            computer.setDronePosition(dronePos.getForwardPosition(droneDir));
             return new Instruction(Action.FLY);
         }
     }
@@ -76,21 +75,18 @@ public class SearchState extends State {
 
         if (lastEchoDir == droneDir) {
             computer.setCurrentState(new MoveState(computer, computer.getDroneDirection(), range));
-            computer.setDronePosition(dronePos.getForwardPosition(droneDir));
             return new Instruction(Action.FLY);
         }
         else if (lastEchoDir == droneDir.getRightDirection()) {
             computer.setCurrentState(new MoveState(computer, computer.getDroneDirection(), range));
             param.put("direction", droneDir.getRightDirection().toString());
             computer.setDroneDirection(droneDir.getRightDirection());
-            computer.setDronePosition(dronePos.getRightPosition(droneDir));
             return new Instruction(Action.HEADING, param);
         }
         else {
             computer.setCurrentState(new MoveState(computer, computer.getDroneDirection(), range));
             param.put("direction", droneDir.getLeftDirection().toString());
             computer.setDroneDirection(droneDir.getLeftDirection());
-            computer.setDronePosition(dronePos.getLeftPosition(droneDir));
             return new Instruction(Action.HEADING, param);
         }
     }
