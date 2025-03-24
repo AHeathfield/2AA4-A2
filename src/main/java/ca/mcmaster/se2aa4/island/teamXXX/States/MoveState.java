@@ -1,10 +1,13 @@
 package ca.mcmaster.se2aa4.island.teamXXX;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import static ca.mcmaster.se2aa4.island.teamXXX.LoggerUtil.logger;
 import org.json.JSONObject;
 
 public class MoveState extends State {
+<<<<<<< HEAD:src/main/java/ca/mcmaster/se2aa4/island/teamXXX/MoveState.java
     private final Logger logger = LogManager.getLogger();
+=======
+    private boolean testing = true;     // Set this to true if you want to do test state
+>>>>>>> 85aa20918b4ed8b7b72e6a327ba7b06d70a4c629:src/main/java/ca/mcmaster/se2aa4/island/teamXXX/States/MoveState.java
     private Direction formerDroneDir;   // Useful for when it turns to know what dir it was before
     private int islandDistance;
 

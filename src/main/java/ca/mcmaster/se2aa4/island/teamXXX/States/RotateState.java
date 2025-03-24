@@ -2,13 +2,11 @@ package ca.mcmaster.se2aa4.island.teamXXX;
 
 import java.util.List;
 import java.util.ArrayList;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import static ca.mcmaster.se2aa4.island.teamXXX.LoggerUtil.logger;
 import org.json.JSONObject;
 
 // This is too help traverse coast line, it does not consider edge cases
 public class RotateState extends State {
-    private final Logger logger = LogManager.getLogger();
     private List<Instruction> sequenceOfInstructs;
     private int instructCount;  // To keep track of what instruct we are on
     private Direction droneDir;

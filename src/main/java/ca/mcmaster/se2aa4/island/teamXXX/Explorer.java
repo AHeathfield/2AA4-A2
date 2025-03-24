@@ -1,8 +1,7 @@
 package ca.mcmaster.se2aa4.island.teamXXX;
 
 import java.io.StringReader;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import static ca.mcmaster.se2aa4.island.teamXXX.LoggerUtil.logger;
 
 import eu.ace_design.island.bot.IExplorerRaid;
 import org.json.JSONObject;
@@ -11,7 +10,6 @@ import org.json.JSONTokener;
 public class Explorer implements IExplorerRaid {
     private Computer computer; //RescueComputer
     private Controller controller = new DroneController();
-    private final Logger logger = LogManager.getLogger();
 
     @Override
     public void initialize(String s) {
