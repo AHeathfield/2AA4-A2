@@ -1,13 +1,15 @@
 package ca.mcmaster.se2aa4.island.teamXXX;
 
 import java.io.StringReader;
-import static ca.mcmaster.se2aa4.island.teamXXX.LoggerUtil.logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import eu.ace_design.island.bot.IExplorerRaid;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
 public class Explorer implements IExplorerRaid {
+    private final Logger logger = LogManager.getLogger();
     private Computer computer; //RescueComputer
     private Controller controller = new DroneController();
 

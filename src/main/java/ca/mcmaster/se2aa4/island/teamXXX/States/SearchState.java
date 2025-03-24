@@ -1,8 +1,10 @@
 package ca.mcmaster.se2aa4.island.teamXXX;
-import static ca.mcmaster.se2aa4.island.teamXXX.LoggerUtil.logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
 public class SearchState extends State {
+    private final Logger logger = LogManager.getLogger();
     private Direction lastEchoDir;
 
     // Constructor

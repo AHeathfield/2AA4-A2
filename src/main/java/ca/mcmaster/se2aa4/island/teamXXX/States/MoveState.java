@@ -1,8 +1,10 @@
 package ca.mcmaster.se2aa4.island.teamXXX;
-import static ca.mcmaster.se2aa4.island.teamXXX.LoggerUtil.logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
 public class MoveState extends State {
+    private final Logger logger = LogManager.getLogger();
     private boolean testing = true;     // Set this to true if you want to do test state
     private Direction formerDroneDir;   // Useful for when it turns to know what dir it was before
     private int islandDistance;
@@ -19,7 +21,7 @@ public class MoveState extends State {
 
     // For now these will just be the STOP action
     @Override
-    public Instruction determineNextInstruction(JSONObject droneResponse) {
+    public Instruction determineNextInstruction() {
         // THIS IS FOR TESTING JUST SET VAR TO FALSE IF NOT
         if (testing) {
             computer.setCurrentState(new TestMoveState(computer, formerDroneDir, islandDistance));

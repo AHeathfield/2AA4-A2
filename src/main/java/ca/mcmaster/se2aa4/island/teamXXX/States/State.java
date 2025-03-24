@@ -11,5 +11,6 @@ public abstract class State {
         this.computer = computer;
     }
 
-    public abstract Instruction determineNextInstruction(JSONObject droneResponse); // Maybe send the JSON obj
+    public abstract Instruction determineNextInstruction();
+    public abstract Instruction determineNextInstruction(JSONObject droneResponse);
 }

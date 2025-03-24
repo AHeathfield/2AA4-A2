@@ -1,8 +1,10 @@
 package ca.mcmaster.se2aa4.island.teamXXX;
-import static ca.mcmaster.se2aa4.island.teamXXX.LoggerUtil.logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
 public class ReturnState extends State {
+    private final Logger logger = LogManager.getLogger();
 
     // Constructor
     public ReturnState(RescueComputer computer) {
@@ -11,7 +13,7 @@ public class ReturnState extends State {
 
     // For now these will just be the STOP action
     @Override
-    public Instruction determineNextInstruction(JSONObject droneResponse) {
+    public Instruction determineNextInstruction() {
         logger.info("Returning...");
         computer.displayIslandMap();
         return new Instruction(Action.STOP);
