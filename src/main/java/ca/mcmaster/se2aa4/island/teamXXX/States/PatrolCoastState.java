@@ -7,6 +7,7 @@ import ca.mcmaster.se2aa4.island.teamXXX.*;
 
 // Patrol coast without grid search
 public class PatrolCoastState extends State {
+    private static boolean isFirstPatrolInstruction = true;
     private Direction lastEchoDir;
     private final Logger logger = LogManager.getLogger();
     private boolean firstInstruction;
@@ -27,6 +28,11 @@ public class PatrolCoastState extends State {
         // first instruction always scans
         if (firstInstruction) {
             firstInstruction = false;
+            if (!PatrolCoastState.isFirstPatrolInstruction && computer.isMapPositionMarked(computer.getDronePosition())) {
+                computer.setCurrentState(new ReturnState(computer));
+                return new Instruction(Action.FLY); // Temp FLY
+            }
+            PatrolCoastState.isFirstPatrolInstruction = false;
             return new Instruction(Action.SCAN);
         }
         else if (lastEchoDir == null) {

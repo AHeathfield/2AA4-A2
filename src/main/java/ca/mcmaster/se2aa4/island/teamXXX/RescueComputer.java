@@ -52,6 +52,8 @@ public class RescueComputer implements Computer {
         this.droneBat -= cost;
         logger.info("The cost of the action was {}", cost);
 
+        
+
         // Updating map (note nextInstruction currently is the prev one)
         if (nextInstruction.getAction() == Action.SCAN) {
             updateMapAtPosition(dronePos, droneResponse);
@@ -68,6 +70,7 @@ public class RescueComputer implements Computer {
             }
         }
 
+
         // This lets the state pattern determine the next instruction based on current state
         nextInstruction = currentState.determineNextInstruction(droneResponse);
     }
@@ -81,9 +84,13 @@ public class RescueComputer implements Computer {
     // Might put the next 2 methods in interface?
     // Leaky abstractions?? Its ok lol
     // Getters
+    public int getDroneBattery() { return droneBat; }
     public Direction getDroneDirection() { return droneDir; }
     public Position getDronePosition() { return dronePos; } 
     public JSONObject getMapValueAtPosition(Position position) { return islandMap.get(position); }
+
+    private boolean isCurrentPositionMarked() { return islandMap.containsKey(dronePos); }
+    public boolean isMapPositionMarked(Position pos) { return islandMap.containsKey(pos); }
 
     // Setters
     private void updateMapAtPosition(Position position, JSONObject landInfo) {
