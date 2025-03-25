@@ -5,7 +5,7 @@ import ca.mcmaster.se2aa4.island.teamXXX.*;
 import ca.mcmaster.se2aa4.island.teamXXX.Enums.*;
 import org.json.JSONObject;
 
-// THIS JUST SCANS EVERY TIME SO I CAN SEE THE PATH IT TOOK!!!
+// scans every time to see the path it took
 public class TestMoveState extends State {
     // private Instruction instructFromLastState;  // The instruction that lead into this state
     private final Logger logger = LogManager.getLogger();
@@ -33,8 +33,6 @@ public class TestMoveState extends State {
 
         Direction currentDir = computer.getDroneDirection();
         Position currentPos = computer.getDronePosition();
-        // TODO: Need to handle the special case where the island is right beside it
-        // ANSWER: treat it like a coast search??
         
         if (lastActionWasTestSCAN) {
             decrementDistanceToIsland();    // Remember it enters this state after it's already started moving!
@@ -79,7 +77,7 @@ public class TestMoveState extends State {
             }
         }
         
-        // SCANNING FOR TESTING!!
+        // scanning for testing
         else {
             lastActionWasTestSCAN = true;
             return new Instruction(Action.SCAN);

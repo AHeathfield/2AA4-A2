@@ -49,14 +49,6 @@ public class CoastSearchState extends State {
             return new Instruction(Action.SCAN, param);
         }
 
-        // check if over creek
-        // if (overCreek) {
-        //     logger.info("------------- Over creek ----------------");
-            
-        //     computer.addCreekFound(dronePos);
-        //     //return new Instruction(Action.STOP, param);
-        // }
-
         JSONArray biomesJSON = droneResponse.getJSONObject("extras").getJSONArray("biomes");
         List<String> biomes = new ArrayList<String>(biomesJSON.length());
         for (int i = 0; i < biomesJSON.length(); i++) {

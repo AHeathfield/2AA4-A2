@@ -30,9 +30,6 @@ public class Position {
 
     }
 
-    // removed hardleft and hardright functions
-    // YAGNI
-
     // For comparing positions
     @Override
     public boolean equals(Object obj) {

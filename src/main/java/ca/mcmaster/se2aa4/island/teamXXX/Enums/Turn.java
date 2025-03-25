@@ -7,8 +7,7 @@ public enum Turn {
     BACKWARDS(new int[]{-1, 0}, new int[]{1, 0}, new int[]{0, 1}, new int[]{0, -1}), 
     FORWARDS(new int[]{1, 0}, new int[]{-1, 0}, new int[]{0, -1}, new int[]{0, 1});
 
-    // going up is minus Y btw (you know what i mean)
-    // -shamil "leaky" abstractbolat ♥(ˆ⌣ˆԅ)
+    // going up is minus Y
 
     private int[] eastMove;
     private int[] westMove;

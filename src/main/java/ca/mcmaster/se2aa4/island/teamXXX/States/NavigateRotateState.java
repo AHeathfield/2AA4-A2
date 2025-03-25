@@ -59,12 +59,6 @@ public class NavigateRotateState extends State {
     // Mimicking rotate player to right or left directions and move forward 1
     @Override
     public Instruction determineNextInstruction(JSONObject droneResponse) {
-        
-        // if found another creek, stop early
-        // if (computer.isCreek(computer.getDronePosition())) {
-        //     logger.info("Arrived at creek! landing!");
-        //     return new Instruction(Action.LAND);
-        // }
 
         Instruction nextInstruct = sequenceOfInstructs.get(instructCount);
         instructCount++;

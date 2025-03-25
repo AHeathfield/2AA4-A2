@@ -86,15 +86,10 @@ public class RescueComputer implements Computer {
     @Override
     public Instruction getNextInstruction() {
         
-        // logger.info("drone battery: {}", droneBat);
         logger.info("drone position: ({}, {})", dronePos.x, dronePos.y);
-        // logger.info("drone direction: {}", droneDir.toString());
         return nextInstruction;
     } 
 
-    // Might put the next 2 methods in interface?
-    // Leaky abstractions?? Its ok lol
-    // Getters
     public int getDroneBattery() { return droneBat; }
     public Direction getDroneDirection() { return droneDir; }
     public Position getDronePosition() { return dronePos; } 

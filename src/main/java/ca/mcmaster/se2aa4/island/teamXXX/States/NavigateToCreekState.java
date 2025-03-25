@@ -48,18 +48,6 @@ public class NavigateToCreekState extends State {
             return new Instruction(Action.FLY, param);
         }
 
-        // if starting at correct x value, already facing right way
-        // if (deltaX == 0) {
-        //     logger.info("Drone at creek's x position");
-
-        //     // drone is heading towards creek
-        //     if (deltaY > 0 && droneDir == Direction.SOUTH) {
-        //         return new Instruction(Action.FLY, param);
-        //     } else if (deltaY < 0 && droneDir == Direction.NORTH) {
-        //         return new Instruction(Action.FLY, param);
-        //     }
-        // }
-
         if (droneDir == Direction.NORTH || droneDir == Direction.SOUTH) {
             return handleYMovement(deltaX, deltaY, droneDir, dronePos, creekPos);
         } 
