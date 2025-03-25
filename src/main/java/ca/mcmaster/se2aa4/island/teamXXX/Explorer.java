@@ -88,7 +88,9 @@ public class Explorer implements IExplorerRaid {
     public String deliverFinalReport() {
         RescueComputer temp = (RescueComputer) computer;
         logger.info("FINALY BATTERY: {}", temp.getDroneBattery());
-        return "no creek found";
+        String creekId = temp.getCreekId(temp.getNearestCreekPosition());
+        logger.info("Creek Identifier: " + creekId);
+        return "Creek Identifier: " + creekId;
     }
 
 }

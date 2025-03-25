@@ -219,7 +219,6 @@ public class RescueComputer implements Computer {
     public String getCreekId(Position pos) {
         if (creeksFound.contains(pos)) {
             JSONArray creeks = islandMap.get(pos).getJSONObject("extras").getJSONArray("creeks");
-            logger.info(creeks.toString());
             return creeks.getString(0);
         }
         logger.info("no creek found at position ({}, {})", pos.x, pos.y);
