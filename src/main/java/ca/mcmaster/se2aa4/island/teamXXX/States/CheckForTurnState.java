@@ -20,10 +20,12 @@ public class CheckForTurnState extends State {
         TURN,
         CHECK_MORE_LAND,
         RETURN_TO_LAND,
+
     }
     miniState lastState  = miniState.ECHO_FORWARD;
     int distanceAhead = 0;
     Direction columnDir = Direction.SOUTH;
+    boolean startingInterlace = false;
 
     // Constructor
     public CheckForTurnState(RescueComputer computer) {
@@ -41,7 +43,7 @@ public class CheckForTurnState extends State {
         
         JSONObject param = new JSONObject();
         logger.info("current state: {}", lastState);
-        logger.info("current dir: {}", computer.getDroneDirection());
+        logger.info("interlace scanning: {}", computer.isInterlaceScanning());
 
         switch (lastState) {
             case ECHO_FORWARD:
@@ -68,6 +70,11 @@ public class CheckForTurnState extends State {
                     logger.info("No Island found, start checking side");
                     lastState = miniState.ECHO_SIDE;
                     Direction echoDir = Direction.EAST;
+
+                    if (computer.isInterlaceScanning()) {
+                        echoDir = Direction.WEST;
+                    } 
+                    
                     param.put("direction", echoDir.toString());
                     return new Instruction(Action.ECHO, param);
                 } else {
@@ -90,8 +97,12 @@ public class CheckForTurnState extends State {
                     logger.info("No land to side, start turning");
                     lastState = miniState.TURN;
                     columnDir = computer.getDroneDirection();
-                    computer.setDroneDirection(Direction.EAST);
-                    param.put("direction", Direction.EAST.toString());
+                    Direction newDir = Direction.EAST;
+                    if (computer.isInterlaceScanning()) {
+                        newDir = Direction.WEST;
+                    }
+                    computer.setDroneDirection(newDir);
+                    param.put("direction", newDir.toString());
                     return new Instruction(Action.HEADING, param);
                 }
 
@@ -106,22 +117,35 @@ public class CheckForTurnState extends State {
                     logger.info("start turning");
                     lastState = miniState.TURN;
                     columnDir = computer.getDroneDirection();
-                    computer.setDroneDirection(Direction.EAST);
-                    param.put("direction", Direction.EAST.toString());
+                    Direction newDir = Direction.EAST;
+                    if (computer.isInterlaceScanning()) {
+                        newDir = Direction.WEST;
+                    }
+                    computer.setDroneDirection(newDir);
+                    param.put("direction", newDir.toString());
                     return new Instruction(Action.HEADING, param);
                 }
             case FLY_ALONG_SIDE:
                 // last instruction was fly
                 // echo side again
                 lastState = miniState.ECHO_SIDE;
-                param.put("direction", Direction.EAST.toString());
+                Direction newDir = Direction.EAST;
+                if (computer.isInterlaceScanning()) {
+                    newDir = Direction.WEST;
+                }
+                param.put("direction", newDir.toString());
                 return new Instruction(Action.ECHO, param);
             case TURN:
                 // just turned, turn again OR check if more land
                 Direction turnDirection = columnDir == Direction.SOUTH ? Direction.NORTH : Direction.SOUTH;
                 logger.info("column dir {}", columnDir);
+                // extra fly if just started interlace scanning
+                if (startingInterlace) {
+                    startingInterlace = false;
+                    return new Instruction(Action.FLY);
+                }
                 if (columnDir == computer.getDroneDirection().getRightDirection().getRightDirection()) {
-                    // already turned, 
+                    // already turned, echo forward
                     lastState = miniState.CHECK_MORE_LAND;
                     param.put("direction", computer.getDroneDirection().toString());
                     return new Instruction(Action.ECHO, param);
@@ -137,9 +161,18 @@ public class CheckForTurnState extends State {
                 boolean noLandAhoy = droneResponse.getJSONObject("extras").get("found").equals("OUT_OF_RANGE");
                 if (noLandAhoy) {
                     // no land ahead, stop
-                    logger.info("No more land ahead, stop");
-                    computer.setCurrentState(new ReturnState(computer));
-                    return new Instruction(Action.SCAN, param);
+                    if (computer.isInterlaceScanning()) {
+                        logger.info("No more land, stop");
+                        computer.setCurrentState(new ReturnState(computer));
+                        return new Instruction(Action.STOP, param);
+                    }
+                    
+                    // handle interlace scan
+                    logger.info("No more land ahead, start interlace");
+                    computer.setInterlaceScanning();
+                    startingInterlace = true;
+                    lastState = miniState.FLY_ALONG_SIDE;
+                    return new Instruction(Action.FLY, param);
                 } else {
                     // land ahead, keep flying
                     lastState = miniState.ECHO_FORWARD;

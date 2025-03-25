@@ -23,6 +23,8 @@ public class RescueComputer implements Computer {
     private Instruction nextInstruction;
     private int crewMembers;
     private Map<Position, Integer> overwritten = new HashMap<>();
+    private boolean interlaceScanning = false;
+    private boolean stopOnCreek = false;
 
     private Position emergencySite;
     private Set<Position> creeksFound;
@@ -165,10 +167,17 @@ public class RescueComputer implements Computer {
         return null;
     }
 
-    public void calcNearestCreekToSite() {
+    public Instruction calcNearestCreekToSite() {
         if (emergencySite == null) {
             logger.info("No emergency site found");
-            return;
+            return new Instruction(Action.STOP);
+        }
+
+        if (creeksFound.isEmpty()) {
+            logger.info("No creeks found. Continue searching");
+            stopOnCreek = true;
+            setCurrentState(new CoastScanState(this));
+            return new Instruction(Action.FLY);
         }
 
         Position nearestCreek = null;
@@ -184,6 +193,8 @@ public class RescueComputer implements Computer {
         }
 
         this.nearestCreek = nearestCreek;
+        logger.info("Nearest creek is at position ({}, {})", nearestCreek.x, nearestCreek.y);
+        return new Instruction(Action.STOP);
     }
 
     public Position getNearestCreekPosition() {
@@ -203,10 +214,21 @@ public class RescueComputer implements Computer {
     public String getCreekId(Position pos) {
         if (creeksFound.contains(pos)) {
             JSONArray creeks = islandMap.get(pos).getJSONObject("extras").getJSONArray("creeks");
-            logger.info(creeks.toString());
             return creeks.getString(0);
         }
         logger.info("no creek found at position ({}, {})", pos.x, pos.y);
         return null;
+    }
+
+    public void setInterlaceScanning() {
+        interlaceScanning = true;
+    }
+
+    public boolean isInterlaceScanning() {
+        return interlaceScanning;
+    }
+
+    public boolean stopOnCreek() {
+        return stopOnCreek;
     }
 }
