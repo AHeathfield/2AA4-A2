@@ -39,23 +39,15 @@ public class CoastSearchState extends State {
             logger.info("------------- Site found ----------------");
 
             computer.setEmergencySite(dronePos);
-            computer.calcNearestCreekToSite();
-
-            logger.info("Nearest creek to site: " + computer.getNearestCreekPosition().toString());
-            logger.info("Site position: " + computer.getDronePosition().toString());
-
-            computer.setCurrentState(new NavigateToCreekState(computer));
-            // doesn't really matter what instruction
-            return new Instruction(Action.SCAN, param);
+            return computer.calcNearestCreekToSite();
         }
 
         // check if over creek
-        // if (overCreek) {
-        //     logger.info("------------- Over creek ----------------");
+        if (computer.stopOnCreek() && overCreek) {
+            logger.info("found creek for site, stopping");
             
-        //     computer.addCreekFound(dronePos);
-        //     //return new Instruction(Action.STOP, param);
-        // }
+            return new Instruction(Action.STOP, param);
+        }
 
         JSONArray biomesJSON = droneResponse.getJSONObject("extras").getJSONArray("biomes");
         List<String> biomes = new ArrayList<String>(biomesJSON.length());
