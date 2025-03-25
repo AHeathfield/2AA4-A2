@@ -46,6 +46,7 @@ public class CoastSearchState extends State {
         if (computer.stopOnCreek() && overCreek) {
             logger.info("found creek for site, stopping");
             
+            computer.setCurrentState(new ReturnState(computer));
             return new Instruction(Action.STOP, param);
         }
 

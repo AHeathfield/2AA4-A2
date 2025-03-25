@@ -170,6 +170,7 @@ public class RescueComputer implements Computer {
     public Instruction calcNearestCreekToSite() {
         if (emergencySite == null) {
             logger.info("No emergency site found");
+            setCurrentState(new ReturnState(this));
             return new Instruction(Action.STOP);
         }
 
@@ -193,7 +194,9 @@ public class RescueComputer implements Computer {
         }
 
         this.nearestCreek = nearestCreek;
+        setCurrentState(new ReturnState(this));
         logger.info("Nearest creek is at position ({}, {})", nearestCreek.x, nearestCreek.y);
+        
         return new Instruction(Action.STOP);
     }
 
