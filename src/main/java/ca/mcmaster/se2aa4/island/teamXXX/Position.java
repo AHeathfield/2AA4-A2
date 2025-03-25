@@ -1,5 +1,6 @@
 package ca.mcmaster.se2aa4.island.teamXXX;
 import ca.mcmaster.se2aa4.island.teamXXX.Enums.Direction;
+import ca.mcmaster.se2aa4.island.teamXXX.Enums.Turn;
 
 // This is holds x and y coordinates, NOTE down is +y
 public class Position {
@@ -22,131 +23,15 @@ public class Position {
         this.y = y;
     }
 
-    // This gets the forward position based on the drone direction
-    public Position getForwardPosition(Direction currentDir) {
-        Position pos = new Position();
-        switch (currentDir) {
-            case Direction.EAST:
-                pos = new Position(this.x + 1, this.y);
-                break;
-            case Direction.WEST:
-                pos = new Position(this.x - 1, this.y);
-                break;
-            case Direction.NORTH:
-                pos = new Position(this.x, this.y - 1);
-                break;
-            case Direction.SOUTH:
-                pos = new Position(this.x, this.y + 1);
-                break;
-        }
-
+    public Position getPosition(Direction currentDir, Turn turn) {
+        int[] moves = turn.getMove(currentDir);
+        Position pos = new Position(this.x + moves[0], this.y + moves[1]);
         return pos;
+
     }
 
-    // This is the position Behind the drone
-    public Position getBackwardPosition(Direction currentDir) {
-        Position pos = new Position();
-        switch (currentDir) {
-            case Direction.EAST:
-                pos = new Position(this.x - 1, this.y);
-                break;
-            case Direction.WEST:
-                pos = new Position(this.x + 1, this.y);
-                break;
-            case Direction.NORTH:
-                pos = new Position(this.x, this.y + 1);
-                break;
-            case Direction.SOUTH:
-                pos = new Position(this.x, this.y - 1);
-                break;
-        }
-
-        return pos;
-    }
-
-    // This is the position if you were HEADING right
-    public Position getRightPosition(Direction currentDir) {
-        Position pos = new Position();
-        switch (currentDir) {
-            case Direction.EAST:
-                pos = new Position(this.x + 1, this.y + 1);
-                break;
-            case Direction.WEST:
-                pos = new Position(this.x - 1, this.y - 1);
-                break;
-            case Direction.NORTH:
-                pos = new Position(this.x + 1, this.y - 1);
-                break;
-            case Direction.SOUTH:
-                pos = new Position(this.x - 1, this.y + 1);
-                break;
-        }
-
-        return pos;
-    }
-    
-    // This is the position if you were HEADING Left
-    public Position getLeftPosition(Direction currentDir) {
-        Position pos = new Position();
-        switch (currentDir) {
-            case Direction.EAST:
-                pos = new Position(this.x + 1, this.y - 1);
-                break;
-            case Direction.WEST:
-                pos = new Position(this.x - 1, this.y + 1);
-                break;
-            case Direction.NORTH:
-                pos = new Position(this.x - 1, this.y - 1);
-                break;
-            case Direction.SOUTH:
-                pos = new Position(this.x + 1, this.y + 1);
-                break;
-        }
-
-        return pos;
-    }
-
-    // This is the position if you were right to move directly right
-    public Position getHardRightPosition(Direction currentDir) {
-        Position pos = new Position();
-        switch (currentDir) {
-            case Direction.EAST:
-                pos = new Position(this.x, this.y + 1);
-                break;
-            case Direction.WEST:
-                pos = new Position(this.x, this.y - 1);
-                break;
-            case Direction.NORTH:
-                pos = new Position(this.x + 1, this.y);
-                break;
-            case Direction.SOUTH:
-                pos = new Position(this.x - 1, this.y);
-                break;
-        }
-
-        return pos;
-    }
-    
-    // This is the position if you were to move directly left
-    public Position getHardLeftPosition(Direction currentDir) {
-        Position pos = new Position();
-        switch (currentDir) {
-            case Direction.EAST:
-                pos = new Position(this.x, this.y - 1);
-                break;
-            case Direction.WEST:
-                pos = new Position(this.x, this.y + 1);
-                break;
-            case Direction.NORTH:
-                pos = new Position(this.x - 1, this.y);
-                break;
-            case Direction.SOUTH:
-                pos = new Position(this.x + 1, this.y);
-                break;
-        }
-
-        return pos;
-    }
+    // removed hardleft and hardright functions
+    // YAGNI
 
     // For comparing positions
     @Override
